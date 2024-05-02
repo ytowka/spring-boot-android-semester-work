@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">КонтенДрузья</string>
+    <string name="register">Создать аккаунт</string>
+    <string name="login">Войти</string>
+    <string name="email">Эл. почта</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="username">Логин</string>
+    <string name="confirm_password">Подтверждение пароля</string>
+    <string name="full_name">Полное имя</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="sign_in_to_account">Войти в аккаунт</string>
+    <string name="error_network">Проверьте соединение с интернетом</string>
+    <string name="error_wrong_credentials">Неправльный логин или пароль</string>
+    <string name="error_already_registered">Пользоветель с такими данными уже зарегестирован</string>
+    <string name="error_other">Ошибка</string>
+    <string name="error_fields">Проверьте поля</string>
+    <string name="admin_panel">Панель Админа</string>
+    <string name="edit_user">Изменить пользователя</string>
+    <string name="is_blocked">Заблокировать</string>
+    <string name="save">Сохранить</string>
+    <string name="topics">Темы</string>
+    <string name="search">Поиск</string>
+</resources>
