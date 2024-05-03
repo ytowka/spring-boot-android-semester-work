@@ -19,7 +19,7 @@ class ContentFriendsBackendApplicationTests {
            val result = contentRepository.getContentWithReviews(0,0, 10)
             println("size: ${result.size}")
             result.forEach {
-                println("result: ${it.contentEntity}, ${it.avg} ${it.count}")
+                println("result: ${it.name}, ${it.avg} ${it.count}")
             }
         }
     }

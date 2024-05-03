@@ -1,7 +1,7 @@
 package com.danilkha.contentfriendsbackend.repository
 
 import com.danilkha.contentfriendsbackend.entity.ContentEntity
-import com.danilkha.contentfriendsbackend.entity.ContentReviewView
+import com.danilkha.contentfriendsbackend.entity.ContentWithReviewView
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -17,5 +17,5 @@ left join (
 where c.theme_id = :topicId
 order by count limit :size offset :offset
     """, nativeQuery = true)
-    fun getContentWithReviews(topicId: Long, offset: Int, size: Int): List<ContentReviewView>
+    fun getContentWithReviews(topicId: Long, offset: Int, size: Int): List<ContentWithReviewView>
 }
