@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile
 class AuthController(
     private val authenticationService: AuthenticationService,
     private val userService: UserService,
-    private val storageService: StorageService
 ) : AuthApi{
 
     @PostMapping("/sign-in")

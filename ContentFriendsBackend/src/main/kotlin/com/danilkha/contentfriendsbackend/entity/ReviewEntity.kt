@@ -1,5 +1,6 @@
 package com.danilkha.contentfriendsbackend.entity
 
+import java.sql.Timestamp
 import javax.persistence.*
 
 @Entity
@@ -10,5 +11,6 @@ data class ReviewEntity(
     val userId: Long,
     val contentId: Long,
     val text: String,
-    val mark: Int
+    val mark: Int,
+    val writeDateTime: Timestamp
 )

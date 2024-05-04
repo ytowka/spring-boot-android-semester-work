@@ -9,6 +9,6 @@ data class ContentResponse(
     val themeId: Long,
     val name: String,
     val imageUrl: String?,
-    val avgMark: Float,
+    val avgMark: Float?,
     val reviewCount: Int,
 )
