@@ -1,6 +1,5 @@
 package com.danilkha.contentfriends.api.content
 
-import com.danilkha.contentfriends.api.theme.ThemeResponse
 import kotlinx.serialization.Serializable
 
 @Serializable

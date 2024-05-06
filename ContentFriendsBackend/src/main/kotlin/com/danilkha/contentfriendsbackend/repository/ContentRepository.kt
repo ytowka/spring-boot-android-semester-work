@@ -31,4 +31,6 @@ where c.theme_id = :topicId and c.name like '%'+:query+'%'
     """, nativeQuery = true)
     fun searchContentWithReviews(topicId: Long, query: String): List<ContentWithReviewView>
 
+
+    fun getAllBy(id: Set<Long>): List<ContentEntity>
 }

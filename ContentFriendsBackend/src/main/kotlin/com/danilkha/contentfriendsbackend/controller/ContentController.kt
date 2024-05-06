@@ -5,12 +5,13 @@ import com.danilkha.contentfriends.api.content.ContentListResponse
 import com.danilkha.contentfriends.api.content.ContentResponse
 import com.danilkha.contentfriendsbackend.service.TopicService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/contnet")
+@RequestMapping("/api/content")
 class ContentController(
     private val topicService: TopicService
 ) : ContentApi{
@@ -23,5 +24,15 @@ class ContentController(
     @GetMapping(params = ["id", "q"])
     override fun search(@RequestParam("id") themeId: Long, @RequestParam("q") query: String): List<ContentResponse> {
         return topicService.searchContent(themeId, query)
+    }
+
+    @GetMapping("/rec")
+    override fun getRecommendedContent(): List<ContentResponse> {
+        return topicService.getRecommendedContent()
+    }
+
+    @GetMapping("/rec/{topicId}")
+    override fun getRecommendedContent(@PathVariable topicId: Long): List<ContentResponse> {
+        return topicService.getRecommendedContent(topicId)
     }
 }

@@ -2,31 +2,41 @@ package com.danilkha.contentfriendsbackend.controller
 
 import com.danilkha.contentfriends.api.content.ContentListResponse
 import com.danilkha.contentfriends.api.review.ReviewApi
+import com.danilkha.contentfriends.api.review.ReviewListResponse
 import com.danilkha.contentfriends.api.review.ReviewRequest
-import org.springframework.web.bind.annotation.RestController
+import com.danilkha.contentfriendsbackend.service.ReviewService
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-class ReviewController : ReviewApi{
+@RequestMapping("/api/reviews")
+class ReviewController(
+    private val reviewService: ReviewService
+) : ReviewApi{
 
-    override fun getReviewsByContent(contentId: Long, page: Int): ContentListResponse {
-        TODO("Not yet implemented")
+    @GetMapping("/content/{contentId}")
+    override fun getReviewsByContent(@PathVariable contentId: Long, @RequestParam page: Int): ReviewListResponse {
+        return reviewService.getReviewsByContent(contentId, page)
     }
 
-    override fun getReviewsByUser(userId: UUID, page: Int): ContentListResponse {
-        TODO("Not yet implemented")
+    @GetMapping("/user/{userId}")
+    override fun getReviewsByUser(@PathVariable userId: UUID, @RequestParam page: Int): ReviewListResponse {
+        return reviewService.getReviewsByUser(userId, page)
     }
 
+    @PostMapping
     override fun writeReview(reviewRequest: ReviewRequest) {
-        TODO("Not yet implemented")
+        return reviewService.writeReview(reviewRequest)
     }
 
+    @PutMapping
     override fun editReview(reviewRequest: ReviewRequest) {
-        TODO("Not yet implemented")
+        return reviewService.editReview(reviewRequest)
     }
 
-    override fun deleteReview(reviewId: Long) {
-        TODO("Not yet implemented")
+    @DeleteMapping("/{reviewId}")
+    override fun deleteReview(@PathVariable reviewId: Long) {
+        return reviewService.deleteReview(reviewId)
     }
 
 }

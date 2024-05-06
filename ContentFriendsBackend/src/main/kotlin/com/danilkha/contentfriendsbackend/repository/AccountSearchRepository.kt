@@ -8,13 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import java.util.UUID
 import javax.transaction.Transactional
 
-interface AccountRepository : JpaRepository<AccountEntity, UUID>, AccountSearchRepository{
+interface AccountSearchRepository {
 
-    fun getByLogin(login: String): AccountEntity?
-    fun findByLoginOrEmail(login: String, email: String): AccountEntity?
-
-    @Modifying
-    @Transactional
-    @Query("update AccountEntity account set account.avatarFileName = ?1 where account.id = ?2")
-    fun setAvatar(fileName: String, id: UUID)
+    fun searchByLoginOrFullName(login: String, fullName: String): List<AccountEntity>
 }

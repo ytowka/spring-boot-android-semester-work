@@ -35,7 +35,7 @@ class UserServiceImpl(
     }
 
     override fun search(query: String): List<UserResponse> {
-        return accountRepository.queryByLoginOrFullName(query, query).map {
+        return accountRepository.searchByLoginOrFullName(query, query).map {
             it.toDto().toResponse()
         }
     }

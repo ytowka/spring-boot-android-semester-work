@@ -11,5 +11,6 @@ data class ReviewResponse (
     val userAvatarUrl: String?,
     val userName: String,
     val mark: Int,
+    val writeTime: Long,
     val text: String
 )

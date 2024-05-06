@@ -1,9 +1,7 @@
 package com.danilkha.contentfriendsbackend.controller
 
-import com.danilkha.contentfriends.api.users.UserApi
-import com.danilkha.contentfriends.api.users.UserListResponse
-import com.danilkha.contentfriends.api.users.UserRequest
-import com.danilkha.contentfriends.api.users.UserResponse
+import com.danilkha.contentfriends.api.users.*
+import com.danilkha.contentfriendsbackend.service.TopicService
 import com.danilkha.contentfriendsbackend.service.UserService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 @RequestMapping("/api/users")
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val topicService: TopicService
 ) : UserApi{
 
 
@@ -45,5 +45,10 @@ class UserController(
     @GetMapping("/me")
     override fun getMe(): UserResponse {
         return userService.getMe()
+    }
+
+    @GetMapping("/match-score/{id}")
+    override fun getUserTasteMatchScore(@PathVariable("id") id: UUID): UserTasteMatchScoreResponse {
+        return topicService.getMatchScore(id)
     }
 }
