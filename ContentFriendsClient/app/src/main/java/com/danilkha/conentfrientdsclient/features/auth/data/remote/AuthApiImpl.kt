@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.auth.data.remote
 
+import com.danilkha.conentfrientdsclient.core.network.bodyOrThrow
 import com.danilkha.contentfriends.ExceptionResponse
 import com.danilkha.contentfriends.api.auth.*
 import io.ktor.client.*
@@ -32,15 +33,5 @@ class AuthApiImpl(
         httpClient.post("api/auth/refresh-token") {
             setBody(refreshTokenRequest)
         }.bodyOrThrow()
-    }
-
-
-    private suspend inline fun <reified T> HttpResponse.bodyOrThrow(): T {
-        if(status.isSuccess()){
-            return body()
-        }else{
-            val errorBody: ExceptionResponse = body()
-            throw Exception(errorBody.message)
-        }
     }
 }

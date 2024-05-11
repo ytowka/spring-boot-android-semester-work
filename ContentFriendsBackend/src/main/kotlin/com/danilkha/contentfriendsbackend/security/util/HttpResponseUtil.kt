@@ -28,7 +28,6 @@ object HttpResponseUtil {
             status = exceptionStatus,
             error = "Unauthorized",
             message = exception.message,
-            path = request.requestURI
         )
 
         Json.encodeToStream(exceptionResponse, response.outputStream);

@@ -13,4 +13,5 @@ data class UserResponse (
     val phone: String,
     val role: RoleApiModel,
     val isBlocked: Boolean,
+    val activated: Boolean,
 )

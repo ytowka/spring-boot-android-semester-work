@@ -130,17 +130,20 @@ fun RootScreen(
                     items = {
                         if(currentUser?.role == RoleDto.ADMIN){
                             navigationItem(label = "admin", icon = Icons.Default.AccountCircle, onClick = {
+                                val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.USER_ADMIN_LIST, false).build()
                                 currentNavItem = it
-                                navController.navigate(NavDestinations.USER_ADMIN_LIST)
+                                navController.navigate(NavDestinations.USER_ADMIN_LIST, navOptions = navOptions)
                             })
                         }
                         navigationItem(label = "topics", icon = Icons.Default.Menu, onClick = {
+                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.TOPIC_LIST, false).build()
                             currentNavItem = it
-                            navController.navigate(NavDestinations.TOPIC_LIST)
+                            navController.navigate(NavDestinations.TOPIC_LIST, navOptions = navOptions)
                         })
                         navigationItem(label = "users", icon = Icons.Default.AccountCircle, onClick = {
+                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.USER_SEARCH, false).build()
                             currentNavItem = it
-                            navController.navigate(NavDestinations.USER_SEARCH)
+                            navController.navigate(NavDestinations.USER_SEARCH, navOptions = navOptions)
                         })
 
                     },

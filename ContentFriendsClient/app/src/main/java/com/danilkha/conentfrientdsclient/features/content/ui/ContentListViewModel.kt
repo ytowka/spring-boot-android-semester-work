@@ -1,30 +1,30 @@
-package com.danilkha.conentfrientdsclient.features.users.ui.list
+package com.danilkha.conentfrientdsclient.features.content.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.danilkha.conentfrientdsclient.core.ui.PagingResponse
 import com.danilkha.conentfrientdsclient.features.content.domain.dto.ContentDto
-import com.danilkha.conentfrientdsclient.features.content.ui.toContentModel
+import com.danilkha.conentfrientdsclient.features.content.domain.usecase.GetAllContentUseCase
+import com.danilkha.conentfrientdsclient.features.content.domain.usecase.GetRecommendedContentUseCase
+import com.danilkha.conentfrientdsclient.features.content.domain.usecase.SearchContentUseCase
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.UserDto
-import com.danilkha.conentfrientdsclient.features.users.domain.usecase.GetUserListUseCase
-import com.danilkha.conentfrientdsclient.features.users.domain.usecase.SearchUserUseCase
 import com.danilkha.conentfrientdsclient.features.users.ui.toUserModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class UserListViewModel(
-    private val getUserListUseCase: GetUserListUseCase,
-    private val searchUserUseCase: SearchUserUseCase
-) : ViewModel(){
+class ContentListViewModel(
+    private val getAllContentUseCase: GetAllContentUseCase,
+    private val searchContentUseCase: SearchContentUseCase,
+    private val topicId: Long
+) : ViewModel() {
 
 
-    private val _uiState = MutableStateFlow(UserListState())
-    val uiState: StateFlow<UserListState> = _uiState
+    val _uiState = MutableStateFlow(ContentListState())
+    val uiState = _uiState.asStateFlow()
 
-    init {
+    init{
         viewModelScope.launch {
             getNextPage()
         }
@@ -33,9 +33,9 @@ class UserListViewModel(
                 .filter { it.isNotBlank() }
                 .distinctUntilChanged()
                 .collectLatest {
-                    val users = searchUserUseCase(it)
+                    val content = searchContentUseCase(topicId, it).getOrElse { emptyList() }
                     _uiState.update { it.copy(
-                        searchUsers = users.map { it.toUserModel() }
+                        searchList = content.map { it.toContentModel() }
                     ) }
                 }
         }
@@ -49,15 +49,15 @@ class UserListViewModel(
 
     fun getNextPage(){
         viewModelScope.launch {
-            uiState.value.users.loadNext {
-                val result = getUserListUseCase(it).getOrThrow()
+            uiState.value.pagerState.loadNext {
+                val result = getAllContentUseCase(topicId, it).getOrThrow()
                 PagingResponse(
-                    data = result.users.map(UserDto::toUserModel),
+                    data = result.content.map(ContentDto::toContentModel),
                     page = result.page,
                     hasNextPage = result.hasNextPage
                 )
-            }.collectLatest {
-                _uiState.update { state -> state.copy(users = it) }
+            }.collectLatest { pagingData ->
+                _uiState.update { it.copy(pagerState = pagingData) }
             }
         }
     }

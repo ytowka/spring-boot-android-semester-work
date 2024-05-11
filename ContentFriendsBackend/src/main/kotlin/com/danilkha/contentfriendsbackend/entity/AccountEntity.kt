@@ -18,6 +18,7 @@ data class AccountEntity(
     val password: String,
     val role: Role,
     val isBlocked: Boolean,
+    val activated: Boolean,
 )
 
 fun AccountEntity.toDto(): AccountDto = AccountDto(
@@ -29,7 +30,8 @@ fun AccountEntity.toDto(): AccountDto = AccountDto(
     password = this.password,
     role = role,
     isBlocked = isBlocked,
-    avatarFileName = avatarFileName
+    avatarFileName = avatarFileName,
+    activated = activated
 )
 
 fun AccountDto.toEntity(): AccountEntity = AccountEntity(
@@ -41,5 +43,6 @@ fun AccountDto.toEntity(): AccountEntity = AccountEntity(
     password = this.password,
     role = this.role,
     isBlocked = isBlocked,
-    avatarFileName = avatarFileName
+    avatarFileName = avatarFileName,
+    activated = activated
 )

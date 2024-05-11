@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.users.data
 
+import com.danilkha.conentfrientdsclient.core.network.ApiException
 import com.danilkha.conentfrientdsclient.core.network.NetworkModule
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.RoleDto
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.UserDto
@@ -52,6 +53,14 @@ class UserListRepositoryImpl(
             account
         } else {
             _me
+        }
+    }
+
+    override suspend fun getMatchScore(userId: UUID): Float? {
+        return try {
+            userApi.getUserTasteMatchScore(userId).score
+        } catch (e: ApiException){
+            return null
         }
     }
 }

@@ -1,14 +1,12 @@
 package com.danilkha.conentfrientdsclient.features.users.data.remote
 
-import com.danilkha.contentfriends.api.users.UserApi
-import com.danilkha.contentfriends.api.users.UserListResponse
-import com.danilkha.contentfriends.api.users.UserRequest
-import com.danilkha.contentfriends.api.users.UserResponse
+import com.danilkha.contentfriends.api.users.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
 import org.koin.core.annotation.Factory
+import java.util.*
 
 @Factory(binds = [UserApi::class])
 class UserApiImpl(
@@ -40,5 +38,9 @@ class UserApiImpl(
 
     override fun getMe(): UserResponse = runBlocking{
         httpClient.get("/api/users/me").body()
+    }
+
+    override fun getUserTasteMatchScore(id: UUID): UserTasteMatchScoreResponse = runBlocking{
+        httpClient.get("/match-score/$id}").body()
     }
 }

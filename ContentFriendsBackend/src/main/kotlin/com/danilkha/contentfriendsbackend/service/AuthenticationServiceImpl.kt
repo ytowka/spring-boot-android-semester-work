@@ -66,7 +66,8 @@ class AuthenticationServiceImpl(
             password = passwordEncoder.encode(request.password),
             role = Role.USER,
             isBlocked = false,
-            avatarFileName = null
+            avatarFileName = null,
+            activated = true
         )
         accountRepository.save(accountDto.toEntity())
 

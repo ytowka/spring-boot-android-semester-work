@@ -14,6 +14,7 @@ data class AccountDto(
     val password: String,
     val role: Role,
     val isBlocked: Boolean,
+    val activated: Boolean,
 )
 
 fun AccountDto.toResponse(): UserResponse = UserResponse(
@@ -24,5 +25,6 @@ fun AccountDto.toResponse(): UserResponse = UserResponse(
     phone = this.phone,
     role = this.role.toApiModel(),
     isBlocked = isBlocked,
-    avatarUrl = avatarFileName?.let { "$FILES_PATH/$avatarFileName" }
+    avatarUrl = avatarFileName?.let { "$FILES_PATH/$avatarFileName" },
+    activated = activated
 )
