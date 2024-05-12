@@ -2,6 +2,11 @@ package com.danilkha.conentfrientdsclient.features.users.ui.info
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.danilkha.conentfrientdsclient.core.ui.PagingResponse
+import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewDto
+import com.danilkha.conentfrientdsclient.features.review.domain.usecase.GetReviewsByContentUseCase
+import com.danilkha.conentfrientdsclient.features.review.domain.usecase.GetReviewsByUserUseCase
+import com.danilkha.conentfrientdsclient.features.review.ui.toReviewModel
 import com.danilkha.conentfrientdsclient.features.users.domain.usecase.GetMatchScoreUseCase
 import com.danilkha.conentfrientdsclient.features.users.domain.usecase.GetMeUseCase
 import com.danilkha.conentfrientdsclient.features.users.domain.usecase.GetUserByIdUseCase
@@ -16,6 +21,7 @@ import java.util.*
 class UserInfoViewModel(
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val getMatchScoreUseCase: GetMatchScoreUseCase,
+    private val reviewsByUserUseCase: GetReviewsByUserUseCase,
     private val userId: String,
 ) : ViewModel(){
 
@@ -23,6 +29,7 @@ class UserInfoViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
+        getNextPage()
         viewModelScope.launch {
             getUserByIdUseCase(userId).onSuccess { result ->
                 _uiState.update {
@@ -39,5 +46,18 @@ class UserInfoViewModel(
         }
     }
 
-
+    fun getNextPage(){
+        viewModelScope.launch {
+            uiState.value.reviewListState.loadNext {
+                val result = reviewsByUserUseCase(userId = UUID.fromString(userId), it).getOrThrow()
+                PagingResponse(
+                    data = result.reviews.map(ReviewDto::toReviewModel),
+                    page = result.page,
+                    hasNextPage = result.hasNextPage
+                )
+            }.collectLatest { pagingData ->
+                _uiState.update { it.copy(reviewListState = pagingData) }
+            }
+        }
+    }
 }

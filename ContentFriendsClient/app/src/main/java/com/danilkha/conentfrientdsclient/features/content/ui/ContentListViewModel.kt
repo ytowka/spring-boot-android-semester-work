@@ -25,9 +25,7 @@ class ContentListViewModel(
     val uiState = _uiState.asStateFlow()
 
     init{
-        viewModelScope.launch {
-            getNextPage()
-        }
+        getNextPage()
         viewModelScope.launch {
             uiState.map { it.searchQuery }
                 .filter { it.isNotBlank() }
