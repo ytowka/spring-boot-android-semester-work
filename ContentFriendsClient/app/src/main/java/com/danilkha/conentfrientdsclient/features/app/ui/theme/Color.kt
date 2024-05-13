@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app.ui.theme
+package com.danilkha.conentfrientdsclient.features.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

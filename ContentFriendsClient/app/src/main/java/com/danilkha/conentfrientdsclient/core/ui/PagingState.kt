@@ -15,30 +15,6 @@ class PagingState<T> (
     val hasNextPage: Boolean = true,
     val loadingPage: Int? = null,
 ){
-    fun aborted(): PagingState<T> = PagingState(
-        list,
-        currentPage,
-        hasNextPage,
-        null
-    )
-
-    fun updateData(pageList: List<T>, page: Int, hasNextPage: Boolean): PagingState<T> = PagingState(
-        list = list.plus(pageList),
-        currentPage = page,
-        hasNextPage = hasNextPage,
-        loadingPage = null
-    )
-
-    fun loadNext(): PagingState<T>? {
-        if(loadingPage != null || !hasNextPage) return null
-        return PagingState(
-            list = list,
-            currentPage = currentPage,
-            hasNextPage = hasNextPage,
-            loadingPage = currentPage + 1
-        )
-    }
-
      fun loadNext(source: suspend (page: Int) -> PagingResponse<T>): Flow<PagingState<T>> {
         if (loadingPage != null || !hasNextPage) return emptyFlow()
         return flow {
@@ -50,7 +26,7 @@ class PagingState<T> (
             )
             emit(loadingState)
             val updatedState = try {
-                val data = source.invoke(currentPage)
+                val data = source.invoke(currentPage )//+ 1)
                 PagingState(
                     list = list.plus(data.data),
                     currentPage = data.page,

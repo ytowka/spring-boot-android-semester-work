@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app
+package com.danilkha.conentfrientdsclient.features.app
 
 object NavDestinations {
 
@@ -8,10 +8,22 @@ object NavDestinations {
     const val USER_SEARCH = "user_search"
 
     object TopicContent{
-        const val topicIdArg = "userid"
+        const val topicIdArg = "topicId"
         const val destination = "topic_content/{$topicIdArg}"
         operator fun invoke(topicId: Long) = "topic_content/$topicId"
     }
+    object ReviewList{
+        const val contentIdArg = "contentId"
+        const val destination = "content_reviews/{$contentIdArg}"
+        operator fun invoke(contentId: Long) = "content_reviews/$contentId"
+    }
+
+    object ReviewEditor{
+        const val contentIdArg = "contentId"
+        const val destination = "review_editor/{$contentIdArg}"
+        operator fun invoke(contentId: Long) = "review_editor/$contentId"
+    }
+
     object UserDetails {
         val userIdArg = "userid"
         val destination = "user_details/{$userIdArg}"
@@ -22,4 +34,5 @@ object NavDestinations {
         val destination = "user_profile/{$userIdArg}"
         operator fun invoke(userid: String) = "user_profile/$userid"
     }
+
 }

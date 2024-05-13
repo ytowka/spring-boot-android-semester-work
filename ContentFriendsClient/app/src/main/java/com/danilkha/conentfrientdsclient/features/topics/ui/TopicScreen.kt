@@ -1,26 +1,44 @@
 package com.danilkha.conentfrientdsclient.features.topics.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.danilkha.conentfrientdsclient.R
 import com.danilkha.conentfrientdsclient.core.ui.TopBar
+import com.danilkha.conentfrientdsclient.features.content.ui.ContentModel
+import com.danilkha.conentfrientdsclient.features.content.ui.ContentUtils
+import com.danilkha.conentfrientdsclient.features.content.ui.MarkColors
+import okhttp3.internal.http2.Header
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TopicScreen(
     topicsViewModel: TopicViewModel = koinViewModel(),
     onTopicClick: (Long) -> Unit,
+    onContentClick: (Long) -> Unit,
 ) {
     val state by topicsViewModel.state.collectAsState()
 
@@ -34,12 +52,70 @@ fun TopicScreen(
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            item {
+                Column {
+                    Header(stringResource(R.string.recomend_to_you))
+                    if(state.recommendedContent.isEmpty()){
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp)
+                            .height(150.dp),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Text(
+                                text = stringResource(R.string.review_more_for_recomendations),
+                            )
+                        }
+                    }else{
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(150.dp),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(state.recommendedContent, key = { it.id }) { content ->
+                                RecomendationListItem(
+                                    contentModel = content,
+                                    onClick = { onContentClick(content.id) }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            item {
+                Header(stringResource(R.string.topics))
+            }
             items(state.topics, key = { it.id }){
                 TopicListItem(topic = it, onClick = {onTopicClick(it.id)})
             }
         }
     }
 
+}
+
+@Composable
+fun Header(
+    text: String,
+){
+    Column {
+        Spacer(modifier = Modifier
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .fillMaxWidth()
+            .height(1.dp)
+        )
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Spacer(modifier = Modifier
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .fillMaxWidth()
+            .height(1.dp)
+        )
+    }
 }
 
 @Composable
@@ -68,5 +144,52 @@ fun TopicListItem(topic: TopicModel, onClick: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun RecomendationListItem(
+    contentModel: ContentModel,
+    onClick: () -> Unit
+){
+    Box(
+        modifier = Modifier
+            .clip(shape = RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .width(100.dp)
+            .fillMaxHeight()
+    ){
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxSize(),
+            model = contentModel.imageUrl,
+            contentDescription = null,
+        )
+        Spacer(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .background(brush = Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
+                .fillMaxWidth()
+                .fillMaxHeight(fraction = 0.5f)
+        )
+        Text(
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.BottomCenter),
+            text = contentModel.name,
+            style = MaterialTheme.typography.labelMedium,
+        )
+
+        Text(
+            modifier = Modifier
+                .background(color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f))
+                .align(Alignment.TopEnd),
+            text = ContentUtils.formatMark(contentModel.avgMark ?: 0f),
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                color = Color.White,
+                fontWeight = FontWeight.Black,
+            ),
+        )
     }
 }

@@ -20,5 +20,8 @@
     <string name="is_blocked">Заблокировать</string>
     <string name="save">Сохранить</string>
     <string name="topics">Темы</string>
+    <string name="recomend_to_you">Рекомендуем вам</string>
+    <string name="review_more_for_recomendations">Оцените больше контента, чтобы получать рекомендации</string>
+    <string name="main">Главная</string>
     <string name="search">Поиск</string>
 </resources>

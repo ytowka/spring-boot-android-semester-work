@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app
+package com.danilkha.conentfrientdsclient.features.app
 
 import com.danilkha.conentfrientdsclient.core.network.NetworkModule
 import com.danilkha.conentfrientdsclient.core.storage.StorageModule

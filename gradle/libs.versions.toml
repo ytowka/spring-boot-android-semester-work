@@ -68,6 +68,7 @@ hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "hiber
 minio = { module = "io.minio:minio", version.ref = "minio" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
+spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 
 
 

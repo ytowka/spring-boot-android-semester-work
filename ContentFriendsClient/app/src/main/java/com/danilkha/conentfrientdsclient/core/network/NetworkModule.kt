@@ -65,7 +65,7 @@ class NetworkModule {
     }
 
     companion object {
-        const val baseUrl = "http://192.168.110.49:8080"
-        //const val baseUrl = "http://192.168.0.128:8080"
+        //const val baseUrl = "http://192.168.110.49:8080"
+        const val baseUrl = "http://192.168.0.128:8080"
     }
 }

@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app
+package com.danilkha.conentfrientdsclient.features.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,8 @@ import com.danilkha.conentfrientdsclient.core.ui.NavigationBar
 import com.danilkha.conentfrientdsclient.features.users.ui.edit.EditUserScreen
 import com.danilkha.conentfrientdsclient.features.users.ui.list.UserListScreen
 import com.danilkha.conentfrientdsclient.features.auth.ui.AuthScreen
+import com.danilkha.conentfrientdsclient.features.review.ui.edit.ReviewEditorScreen
+import com.danilkha.conentfrientdsclient.features.review.ui.list.ReviewListScreen
 import com.danilkha.conentfrientdsclient.features.topics.ui.TopicScreen
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.RoleDto
 import com.danilkha.conentfrientdsclient.features.users.ui.UserRoleModel
@@ -75,9 +77,14 @@ fun RootScreen(
                     }
                 }
                 composable(NavDestinations.TOPIC_LIST) {
-                    TopicScreen {
-                        navController.navigate(NavDestinations.TopicContent(it))
-                    }
+                    TopicScreen (
+                        onTopicClick = {
+                            navController.navigate(NavDestinations.TopicContent(it))
+                        },
+                        onContentClick = {
+                            navController.navigate(NavDestinations.ReviewList(it))
+                        }
+                    )
                 }
                 composable(
                     route = NavDestinations.TopicContent.destination,
@@ -122,9 +129,29 @@ fun RootScreen(
                         }
                     )
                 }
+
+                composable(
+                    route = NavDestinations.ReviewList.destination,
+                    arguments = listOf(navArgument(NavDestinations.ReviewList.contentIdArg) { type = NavType.LongType })
+                ){ backStackEntry ->
+                    val contentId = backStackEntry.arguments?.getLong(NavDestinations.ReviewList.contentIdArg)!!
+                    ReviewListScreen(
+                        viewModel = koinViewModel { parametersOf(contentId) },
+                    )
+                }
+
+                composable(
+                    route = NavDestinations.ReviewEditor.destination,
+                    arguments = listOf(navArgument(NavDestinations.ReviewEditor.contentIdArg) { type = NavType.LongType })
+                ){ backStackEntry ->
+                    val contentId = backStackEntry.arguments?.getLong(NavDestinations.ReviewEditor.contentIdArg)!!
+                    ReviewEditorScreen(
+                        viewModel = koinViewModel { parametersOf(contentId) },
+                    )
+                }
+
             }
             var currentNavItem by remember { mutableIntStateOf(0) }
-            val res = LocalContext.current.resources
             if(isLoggedIn == true){
                 NavigationBar(
                     items = {

@@ -20,7 +20,7 @@ class TopicViewModel(
         flow { emit(getRecommendedFeedUseCase()) }
     ){ topics, feed ->
         TopicListState(
-            topics = topics.map { it.toTopicModel() },
+            topics = topics.getOrElse { emptyList() }.map { it.toTopicModel() },
             recommendedContent = feed.getOrElse { emptyList() }.map { it.toContentModel() }
         )
     }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = TopicListState())

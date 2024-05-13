@@ -9,6 +9,7 @@ interface AuthRepository {
     suspend fun createAccount(registerRequestDto: RegisterRequestDto)
 
     suspend fun login(loginRequestDto: LoginRequestDto)
+    suspend fun logout()
 
     suspend fun getNewToken(refreshToken: String): TokenPairDto
 

@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app.ui.theme
+package com.danilkha.conentfrientdsclient.features.app.ui.theme
 
 import android.app.Activity
 import android.os.Build

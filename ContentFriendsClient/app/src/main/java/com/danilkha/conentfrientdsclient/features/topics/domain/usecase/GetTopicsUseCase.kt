@@ -9,7 +9,7 @@ class GetTopicsUseCase(
     private val topicRepository: TopicRepository
 ) {
 
-    suspend operator fun invoke(): List<TopicDto> {
-        return topicRepository.getTopics()
+    suspend operator fun invoke(): Result<List<TopicDto>> {
+        return  kotlin.runCatching{ topicRepository.getTopics() }
     }
 }

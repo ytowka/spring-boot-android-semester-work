@@ -71,6 +71,14 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun logout() {
+        dataStore.edit {
+            it.remove(stringPreferencesKey(KEY_REFRESH_TOKEN))
+            it.remove(stringPreferencesKey(KEY_ACCESS_TOKEN))
+            it.remove(stringPreferencesKey(KEY_ACCESS_TOKEN_EXPIRES))
+        }
+    }
+
     override suspend fun getNewToken(refreshToken: String): TokenPairDto {
         return withContext(Dispatchers.IO){
             val tokenResponse = try {

@@ -1,4 +1,4 @@
-package com.danilkha.conentfrientdsclient.app
+package com.danilkha.conentfrientdsclient.features.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

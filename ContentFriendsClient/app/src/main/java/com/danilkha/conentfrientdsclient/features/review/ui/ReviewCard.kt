@@ -10,7 +10,6 @@ data class ReviewCard(
 fun ReviewDto.toReviewModel(): ReviewCard = ReviewCard(
     reviewModel = ReviewModel(
         contentId = contentId,
-        userName = userName,
         mark = mark,
         writeTime = writeTime,
         text = text

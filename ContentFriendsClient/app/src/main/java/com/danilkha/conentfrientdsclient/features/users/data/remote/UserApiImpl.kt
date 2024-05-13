@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.users.data.remote
 
+import com.danilkha.conentfrientdsclient.core.network.bodyOrThrow
 import com.danilkha.contentfriends.api.users.*
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -16,17 +17,17 @@ class UserApiImpl(
     override fun getAll(page: Int): UserListResponse = runBlocking{
         httpClient.get("/api/users"){
             parameter("page", page)
-        }.body()
+        }.bodyOrThrow()
     }
 
     override fun search(query: String): List<UserResponse> = runBlocking{
         httpClient.get("/api/users"){
             parameter("q", query)
-        }.body()
+        }.bodyOrThrow()
     }
 
     override fun get(id: String): UserResponse = runBlocking{
-        httpClient.get("/api/users/$id").body()
+        httpClient.get("/api/users/$id").bodyOrThrow()
     }
 
     override fun update(user: UserRequest) = runBlocking{
@@ -37,10 +38,10 @@ class UserApiImpl(
     }
 
     override fun getMe(): UserResponse = runBlocking{
-        httpClient.get("/api/users/me").body()
+        httpClient.get("/api/users/me").bodyOrThrow()
     }
 
     override fun getUserTasteMatchScore(id: UUID): UserTasteMatchScoreResponse = runBlocking{
-        httpClient.get("/match-score/$id}").body()
+        httpClient.get("/match-score/$id}").bodyOrThrow()
     }
 }

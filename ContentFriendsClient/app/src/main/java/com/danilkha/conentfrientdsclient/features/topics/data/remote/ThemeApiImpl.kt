@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.topics.data.remote
 
+import com.danilkha.conentfrientdsclient.core.network.bodyOrThrow
 import com.danilkha.contentfriends.api.theme.ThemeApi
 import com.danilkha.contentfriends.api.theme.ThemeResponse
 import io.ktor.client.*
@@ -13,8 +14,6 @@ class ThemeApiImpl(
     private val httpClient: HttpClient
 ) : ThemeApi{
     override fun getAllThemes(): List<ThemeResponse> = runBlocking {
-        httpClient.get("/api/topics").body()
+        httpClient.get("/api/topics").bodyOrThrow()
     }
-
-
 }
