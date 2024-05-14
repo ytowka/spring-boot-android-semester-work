@@ -54,7 +54,7 @@ class WebSecurityConfig(
                 .addFilterBefore(tokenAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
 
             exceptionHandling()
-                //.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
         }
     }

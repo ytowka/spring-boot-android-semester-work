@@ -1,12 +1,14 @@
 package com.danilkha.contentfriendsbackend.security.filter
 
 import com.danilkha.contentfriendsbackend.model.AccountDto
+import com.danilkha.contentfriendsbackend.security.exception.AuthenticationHeaderException
 import com.danilkha.contentfriendsbackend.security.model.TokenRequest
 import com.danilkha.contentfriendsbackend.security.util.HttpResponseUtil
 import com.danilkha.contentfriendsbackend.security.util.HttpSettingUtil
 import com.danilkha.contentfriendsbackend.service.AuthenticationService
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter
@@ -38,12 +40,16 @@ class TokenAuthenticationFilter(
                 )
             )
             if(token != null) {
-                val account: AccountDto = authenticationService.userInfoByToken(token)
-                SecurityContextHolder.getContext().authentication = PreAuthenticatedAuthenticationToken(account, token)
+                try {
+                    val account: AccountDto = authenticationService.userInfoByToken(token)
+                    SecurityContextHolder.getContext().authentication = PreAuthenticatedAuthenticationToken(account, token)
+                }catch (e: Exception) {
+                    throw AuthenticationHeaderException(e.message, e)
+                }
             }
-
             chain.doFilter(request, response)
-        } catch (exception: Exception) {
+        } catch (exception: AuthenticationHeaderException) {
+            exception.printStackTrace()
             HttpResponseUtil.putExceptionInResponse(
                 (request as HttpServletRequest), (response as HttpServletResponse),
                 exception, HttpServletResponse.SC_UNAUTHORIZED

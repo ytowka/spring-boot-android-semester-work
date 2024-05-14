@@ -26,7 +26,7 @@ class PagingState<T> (
             )
             emit(loadingState)
             val updatedState = try {
-                val data = source.invoke(currentPage )//+ 1)
+                val data = source.invoke(currentPage + 1)
                 PagingState(
                     list = list.plus(data.data),
                     currentPage = data.page,

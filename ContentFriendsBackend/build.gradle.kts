@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.web)
-    //implementation(libs.spring.boot.starter.logging)
+    implementation(libs.spring.boot.starter.logging)
     implementation (libs.hibernate.core)
     implementation(libs.minio)
     implementation(libs.jwt.parser)

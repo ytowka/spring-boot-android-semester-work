@@ -46,7 +46,7 @@ class AuthenticationServiceImpl(
         val userEntity = accountRepository.getByLogin(login)
 
 
-        return userEntity?.toDto() ?: throw UserNotFoundException("User not found")
+        return userEntity?.toDto() ?: throw AuthenticationHeaderException("User not found")
     }
 
     override fun register(request: RegisterRequest): TokenPairResponse {
