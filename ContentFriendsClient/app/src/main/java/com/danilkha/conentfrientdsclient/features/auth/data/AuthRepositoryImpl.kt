@@ -32,8 +32,6 @@ class AuthRepositoryImpl(
     private val avatarApi: AvatarApi,
     context: Context,
 ) : AuthRepository{
-
-    private var currentToken: AccessTokenDto? = null
     private val contentResolver = context.contentResolver
 
     override suspend fun createAccount(registerRequestDto: RegisterRequestDto) {
@@ -53,7 +51,6 @@ class AuthRepositoryImpl(
                     it.moveToFirst()
                     it.getString(nameIndex)
                 }
-                Log.d("debugg", "createAccount() $name")
                 if(name != null){
                     contentResolver.openInputStream(registerRequestDto.avatarUri)?.use { it.readBytes() }?.let {
                         avatarApi.loadAvatar(it, name, response.accessToken)
@@ -92,7 +89,7 @@ class AuthRepositoryImpl(
                 throw e
             }
             saveToken(tokenResponse)
-             TokenPairDto(tokenResponse.accessToken, tokenResponse.refreshToken)
+            TokenPairDto(tokenResponse.accessToken, tokenResponse.refreshToken)
         }
 
     }
@@ -104,9 +101,6 @@ class AuthRepositoryImpl(
             AccessTokenDto(token, expires)
         }else null
     }.distinctUntilChanged()
-        .onStart {
-            if(currentToken != null) { emit(currentToken) }
-    }
 
     override suspend fun getRefreshToken(): String? {
         return dataStore.data.first()[stringPreferencesKey(KEY_REFRESH_TOKEN)]
@@ -114,7 +108,6 @@ class AuthRepositoryImpl(
 
     private suspend fun saveToken(tokenPairResponse: TokenPairResponse){
         val tokenExpiration = getTokenExpiration(tokenPairResponse.accessToken)
-        currentToken = AccessTokenDto(tokenPairResponse.accessToken, tokenExpiration)
         dataStore.edit {
             it[stringPreferencesKey(KEY_REFRESH_TOKEN)] = tokenPairResponse.refreshToken
             it[longPreferencesKey(KEY_ACCESS_TOKEN_EXPIRES)] = tokenExpiration

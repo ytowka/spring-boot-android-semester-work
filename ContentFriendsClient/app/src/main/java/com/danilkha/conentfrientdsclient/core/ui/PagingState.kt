@@ -37,7 +37,7 @@ class PagingState<T> (
                 PagingState(
                     list,
                     currentPage,
-                    hasNextPage,
+                    false,
                     null
                 )
             }

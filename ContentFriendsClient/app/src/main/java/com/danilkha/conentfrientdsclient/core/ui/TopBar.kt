@@ -2,6 +2,7 @@ package com.danilkha.conentfrientdsclient.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -15,9 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.danilkha.conentfrientdsclient.R
 
-object TopBarDefaults{
+object TopBarDefaults {
     val height = 56.dp
 }
+
 @Composable
 fun GenericTopBar(
     actionIcon: ImageVector? = null,
@@ -58,7 +60,7 @@ fun TopBar(
         actionIcon = actionIcon,
         onActionClick = onActionClick,
         centerContent = {
-            if(text != null) {
+            if (text != null) {
                 Text(
                     text = text,
                     style = MaterialTheme.typography.titleMedium,
@@ -82,19 +84,19 @@ fun SearchTopBar(
         actionIcon = actionIcon,
         onActionClick = onActionClick,
         centerContent = {
-            OutlinedTextField(
+            BasicTextField(
                 modifier = Modifier
-                    .padding(5.dp)
                     .weight(1f),
                 value = text,
                 onValueChange = onQueryChanged,
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.search)
-                    )
-                },
-                trailingIcon = {
-                    if(text.isNotEmpty()){
+                decorationBox = { innerTextField ->
+                    Row(modifier = Modifier.padding(5.dp)) {
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if(text.isEmpty()){
+                                Text(text = stringResource(R.string.search))
+                            }
+                            innerTextField()
+                        }
                         IconButton(
                             onClick = { onQueryChanged("") },
                         ) {

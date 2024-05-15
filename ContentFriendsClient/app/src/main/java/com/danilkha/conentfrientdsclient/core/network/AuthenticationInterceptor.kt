@@ -1,24 +1,22 @@
 package com.danilkha.conentfrientdsclient.core.network
 
-import android.util.Log
-import com.danilkha.conentfrientdsclient.features.auth.domain.usecase.GetValidAccessTokenUseCase
+import com.danilkha.conentfrientdsclient.features.auth.domain.usecase.AuthTokenProvider
 import com.danilkha.conentfrientdsclient.features.auth.domain.usecase.LogoutUseCase
 import com.danilkha.contentfriends.api.auth.SecurityConsts
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
-import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 
 @Single
 class AuthenticationInterceptor(
-    private val getValidAccessTokenUseCase: GetValidAccessTokenUseCase,
+    private val authTokenProvider: AuthTokenProvider,
     private val logoutUseCase: LogoutUseCase
 ) : Interceptor {
 
 
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking{
-        val accessToken = getValidAccessTokenUseCase()
+        val accessToken = authTokenProvider.getToken()
 
 
         val newRequest = accessToken?.let {

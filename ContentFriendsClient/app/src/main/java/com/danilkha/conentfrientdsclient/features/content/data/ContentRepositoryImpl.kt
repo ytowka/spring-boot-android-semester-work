@@ -17,19 +17,19 @@ import org.koin.core.annotation.Single
 class ContentRepositoryImpl(
     private val contentApi: ContentApi,
 ) : ContentRepository {
-    override suspend fun getAllContent(topicId: Long, page: Int): ContentListResponseDto = withContext(Dispatchers.Main){
+    override suspend fun getAllContent(topicId: Long, page: Int): ContentListResponseDto = withContext(Dispatchers.IO){
         contentApi.getAllContents(topicId, page).toDto()
     }
 
-    override suspend fun searchContent(topicId: Long, query: String): List<ContentDto>  = withContext(Dispatchers.Main){
+    override suspend fun searchContent(topicId: Long, query: String): List<ContentDto>  = withContext(Dispatchers.IO){
         contentApi.search(topicId, query).map(ContentResponse::toDto)
     }
 
-    override suspend fun getRecommendedContent(): List<ContentDto> = withContext(Dispatchers.Main){
+    override suspend fun getRecommendedContent(): List<ContentDto> = withContext(Dispatchers.IO){
         contentApi.getRecommendedContent().map(ContentResponse::toDto)
     }
 
-    override suspend fun getRecommendedContent(topicId: Long): List<ContentDto> = withContext(Dispatchers.Main){
+    override suspend fun getRecommendedContent(topicId: Long): List<ContentDto> = withContext(Dispatchers.IO){
         contentApi.getRecommendedContent(topicId).map(ContentResponse::toDto)
     }
 

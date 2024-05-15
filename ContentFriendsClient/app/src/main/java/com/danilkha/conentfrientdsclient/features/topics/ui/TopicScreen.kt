@@ -31,6 +31,7 @@ import com.danilkha.conentfrientdsclient.core.ui.TopBar
 import com.danilkha.conentfrientdsclient.features.content.ui.ContentModel
 import com.danilkha.conentfrientdsclient.features.content.ui.ContentUtils
 import com.danilkha.conentfrientdsclient.features.content.ui.MarkColors
+import com.danilkha.conentfrientdsclient.features.content.ui.RecomendedContentList
 import okhttp3.internal.http2.Header
 import org.koin.androidx.compose.koinViewModel
 
@@ -67,20 +68,10 @@ fun TopicScreen(
                             )
                         }
                     }else{
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp),
-                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            items(state.recommendedContent, key = { it.id }) { content ->
-                                RecomendationListItem(
-                                    contentModel = content,
-                                    onClick = { onContentClick(content.id) }
-                                )
-                            }
-                        }
+                        RecomendedContentList(
+                            items = state.recommendedContent,
+                            onClick = onContentClick,
+                        )
                     }
                 }
             }
@@ -144,52 +135,5 @@ fun TopicListItem(topic: TopicModel, onClick: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun RecomendationListItem(
-    contentModel: ContentModel,
-    onClick: () -> Unit
-){
-    Box(
-        modifier = Modifier
-            .clip(shape = RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
-            .width(100.dp)
-            .fillMaxHeight()
-    ){
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxSize(),
-            model = contentModel.imageUrl,
-            contentDescription = null,
-        )
-        Spacer(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .background(brush = Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
-                .fillMaxWidth()
-                .fillMaxHeight(fraction = 0.5f)
-        )
-        Text(
-            modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.BottomCenter),
-            text = contentModel.name,
-            style = MaterialTheme.typography.labelMedium,
-        )
-
-        Text(
-            modifier = Modifier
-                .background(color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f))
-                .align(Alignment.TopEnd),
-            text = ContentUtils.formatMark(contentModel.avgMark ?: 0f),
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                color = Color.White,
-                fontWeight = FontWeight.Black,
-            ),
-        )
     }
 }

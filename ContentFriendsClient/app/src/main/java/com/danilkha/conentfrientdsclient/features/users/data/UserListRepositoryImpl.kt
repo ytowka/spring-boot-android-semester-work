@@ -47,12 +47,14 @@ class UserListRepositoryImpl(
 
     override suspend fun getMe(): UserDto {
         val _me = me
-        return if (_me == null) {
-            val account = userApi.getMe().toDto()
-            me = account
-            account
-        } else {
-            _me
+        return withContext (Dispatchers.IO) {
+            if (_me == null) {
+                val account = userApi.getMe().toDto()
+                me = account
+                account
+            } else {
+                _me
+            }
         }
     }
 

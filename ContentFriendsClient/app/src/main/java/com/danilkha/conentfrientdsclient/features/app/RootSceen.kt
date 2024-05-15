@@ -21,6 +21,7 @@ import com.danilkha.conentfrientdsclient.core.ui.NavigationBar
 import com.danilkha.conentfrientdsclient.features.users.ui.edit.EditUserScreen
 import com.danilkha.conentfrientdsclient.features.users.ui.list.UserListScreen
 import com.danilkha.conentfrientdsclient.features.auth.ui.AuthScreen
+import com.danilkha.conentfrientdsclient.features.content.ui.ContentListScreen
 import com.danilkha.conentfrientdsclient.features.review.ui.edit.ReviewEditorScreen
 import com.danilkha.conentfrientdsclient.features.review.ui.list.ReviewListScreen
 import com.danilkha.conentfrientdsclient.features.topics.ui.TopicScreen
@@ -91,6 +92,11 @@ fun RootScreen(
                     arguments = listOf(navArgument(NavDestinations.TopicContent.topicIdArg) { type = NavType.LongType })
                 ) { backStackEntry ->
                     val id = backStackEntry.arguments?.getLong(NavDestinations.TopicContent.topicIdArg)!!
+                    ContentListScreen(
+                        viewModel = koinViewModel { parametersOf(id) },
+                        onContentClick = { navController.navigate(NavDestinations.ReviewList(it)) },
+                        onBack = { navController.navigateUp() }
+                    )
                 }
                 composable(NavDestinations.USER_ADMIN_LIST){
                     UserListScreen(
