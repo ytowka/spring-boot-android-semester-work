@@ -3,7 +3,7 @@ package com.danilkha.contentfriendsbackend.entity
 import com.danilkha.contentfriends.api.content.ContentResponse
 import com.danilkha.contentfriendsbackend.controller.FILES_PATH
 
-interface ContentWithReviewView{
+interface ContentWithReviewView {
     val id: Long
     val themeId: Long
     val name: String

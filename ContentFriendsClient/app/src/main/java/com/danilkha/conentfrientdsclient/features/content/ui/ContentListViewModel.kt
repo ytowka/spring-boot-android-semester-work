@@ -17,11 +17,12 @@ import org.koin.android.annotation.KoinViewModel
 class ContentListViewModel(
     private val getAllContentUseCase: GetAllContentUseCase,
     private val searchContentUseCase: SearchContentUseCase,
-    private val topicId: Long
+    private val topicId: Long,
+    private val topicName: String
 ) : ViewModel() {
 
 
-    val _uiState = MutableStateFlow(ContentListState())
+    val _uiState = MutableStateFlow(ContentListState(topicName = topicName))
     val uiState = _uiState.asStateFlow()
 
     init{

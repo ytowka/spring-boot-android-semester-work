@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 
 @SpringBootTest
 class ContentFriendsBackendApplicationTests {
@@ -20,10 +19,10 @@ class ContentFriendsBackendApplicationTests {
     @Test
     fun `avg mark and count subquery works`() {
         assertDoesNotThrow {
-           val result = contentRepository.getContentWithReviews(0,0, 10)
+           val result = contentRepository.getContentWithReviews(1,0, 10)
             println("size: ${result.size}")
             result.forEach {
-                println("result: ${it.name}, ${it.avg} ${it.count}")
+                println("result: ${it.name} (${it.themeId}), ${it.avg} ${it.count}")
             }
         }
     }

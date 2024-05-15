@@ -9,8 +9,9 @@ object NavDestinations {
 
     object TopicContent{
         const val topicIdArg = "topicId"
-        const val destination = "topic_content/{$topicIdArg}"
-        operator fun invoke(topicId: Long) = "topic_content/$topicId"
+        const val topicNameArg = "topicName"
+        const val destination = "topic_content/{$topicIdArg}/{$topicNameArg}"
+        operator fun invoke(topicId: Long, topicName: String) = "topic_content/$topicId/$topicName"
     }
     object ReviewList{
         const val contentIdArg = "contentId"

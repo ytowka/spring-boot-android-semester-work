@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -66,21 +67,27 @@ fun RecomendationListItem(
         Spacer(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .background(brush = Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
+                .background(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
                 .fillMaxWidth()
                 .fillMaxHeight(fraction = 0.5f)
         )
         Text(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(4.dp)
                 .align(Alignment.BottomCenter),
             text = contentModel.name,
             style = MaterialTheme.typography.labelMedium,
+            color = Color.White,
         )
 
         Text(
             modifier = Modifier
-                .background(color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f))
+                .background(
+                    color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f),
+                    shape = CircleShape
+                )
+                .padding(8.dp)
                 .align(Alignment.TopEnd),
             text = ContentUtils.formatMark(contentModel.avgMark ?: 0f),
             textAlign = TextAlign.Center,

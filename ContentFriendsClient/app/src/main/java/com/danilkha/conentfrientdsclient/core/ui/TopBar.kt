@@ -89,19 +89,29 @@ fun SearchTopBar(
                     .weight(1f),
                 value = text,
                 onValueChange = onQueryChanged,
+                textStyle = MaterialTheme.typography.labelMedium,
                 decorationBox = { innerTextField ->
-                    Row(modifier = Modifier.padding(5.dp)) {
-                        Box(contentAlignment = Alignment.CenterStart) {
+                    Row(modifier = Modifier
+                        .padding(5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
                             if(text.isEmpty()){
                                 Text(text = stringResource(R.string.search))
                             }
                             innerTextField()
                         }
-                        IconButton(
-                            onClick = { onQueryChanged("") },
-                        ) {
-                            Icon(Icons.Filled.Close, contentDescription = "")
+                        if(text.isNotEmpty()){
+                            IconButton(
+                                onClick = { onQueryChanged("") },
+                            ) {
+                                Icon(Icons.Filled.Close, contentDescription = "")
+                            }
                         }
+
                     }
                 }
             )

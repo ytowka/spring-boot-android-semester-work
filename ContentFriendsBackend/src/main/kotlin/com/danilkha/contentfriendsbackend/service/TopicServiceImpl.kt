@@ -42,7 +42,7 @@ class TopicServiceImpl(
     }
 
     override fun searchContent(id: Long, query: String): List<ContentResponse> {
-        val pageResponse = contentRepository.searchContentWithReviews(id, query)
+        val pageResponse = contentRepository.searchContentWithReviews(id, "%$query%")
         return pageResponse.map(ContentWithReviewView::toResponse)
     }
 

@@ -52,6 +52,13 @@ class PagingState<T> (
             hasNextPage = true,
             loadingPage = null,
         )
+
+        fun <T> static(list: List<T>): PagingState<T> = PagingState(
+            list = list,
+            currentPage = 0,
+            hasNextPage = false,
+            loadingPage = null,
+        )
     }
 }
 

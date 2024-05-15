@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -41,7 +42,7 @@ fun ContentListScreen(
     val state by viewModel.uiState.collectAsState()
 
     val pagingListState = rememberPageableListState(
-        state = state.pagerState,
+        state = state.currentPagerState,
         nextPageRequest = viewModel::getNextPage
     )
 
@@ -58,33 +59,35 @@ fun ContentListScreen(
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            item {
-                Column {
-                    Header(stringResource(R.string.recomend_to_you))
-                    if (state.recommendedContent.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp)
-                                .height(150.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(R.string.review_more_in_category_for_recomendations),
+            if(state.searchQuery.isEmpty()){
+                item {
+                    Column {
+                        Header(stringResource(R.string.recomend_to_you))
+                        if (state.recommendedContent.isEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp)
+                                    .height(150.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.review_more_in_category_for_recomendations),
+                                )
+                            }
+                        } else {
+                            RecomendedContentList(
+                                items = state.recommendedContent,
+                                onClick = onContentClick,
                             )
                         }
-                    } else {
-                        RecomendedContentList(
-                            items = state.recommendedContent,
-                            onClick = onContentClick,
-                        )
                     }
                 }
             }
             item {
-                Header(stringResource(R.string.topics))
+                Header(stringResource(R.string.topic, state.topicName))
             }
-            items(state.pagerState.list, key = { it.id }) {
+            items(state.currentPagerState.list, key = { it.id }) {
                 ContentListItem(
                     contentModel = it,
                     onClick = { onContentClick(it.id) }
@@ -104,33 +107,37 @@ fun ContentListItem(
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
     ) {
         AsyncImage(
             modifier = Modifier
+                .wrapContentHeight()
                 .fillMaxWidth(),
             model = contentModel.imageUrl,
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillWidth,
         )
         Spacer(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .background(brush = Brush.verticalGradient(listOf(Color.Black, Color.Transparent)))
+                .background(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
                 .fillMaxWidth()
-                .fillMaxHeight(fraction = 0.5f)
+                .height(50.dp)
         )
         Text(
             modifier = Modifier
-                .padding(4.dp)
+                .fillMaxWidth()
+                .padding(16.dp)
                 .align(Alignment.BottomCenter),
             text = contentModel.name,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            color = Color.White,
         )
 
         Text(
             modifier = Modifier
-                .background(color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f))
+                .padding(8.dp)
+                .background(color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f), shape = CircleShape)
+                .padding(8.dp)
                 .align(Alignment.TopEnd),
             text = ContentUtils.formatMark(contentModel.avgMark ?: 0f),
             textAlign = TextAlign.Center,

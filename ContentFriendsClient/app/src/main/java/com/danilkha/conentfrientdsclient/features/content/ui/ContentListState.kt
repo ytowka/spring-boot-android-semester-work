@@ -8,4 +8,12 @@ data class ContentListState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchList: List<ContentModel> = listOf(),
-)
+    val topicName: String,
+){
+
+    val currentPagerState = if(searchQuery.isEmpty()) {
+        pagerState
+    } else {
+        PagingState.static(searchList)
+    }
+}

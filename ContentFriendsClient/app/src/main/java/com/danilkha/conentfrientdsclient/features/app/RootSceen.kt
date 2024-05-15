@@ -80,7 +80,7 @@ fun RootScreen(
                 composable(NavDestinations.TOPIC_LIST) {
                     TopicScreen (
                         onTopicClick = {
-                            navController.navigate(NavDestinations.TopicContent(it))
+                            navController.navigate(NavDestinations.TopicContent(it.id, it.name))
                         },
                         onContentClick = {
                             navController.navigate(NavDestinations.ReviewList(it))
@@ -89,11 +89,15 @@ fun RootScreen(
                 }
                 composable(
                     route = NavDestinations.TopicContent.destination,
-                    arguments = listOf(navArgument(NavDestinations.TopicContent.topicIdArg) { type = NavType.LongType })
+                    arguments = listOf(
+                        navArgument(NavDestinations.TopicContent.topicIdArg) { type = NavType.LongType },
+                        navArgument(NavDestinations.TopicContent.topicNameArg) { type = NavType.StringType }
+                    )
                 ) { backStackEntry ->
                     val id = backStackEntry.arguments?.getLong(NavDestinations.TopicContent.topicIdArg)!!
+                    val name = backStackEntry.arguments?.getString(NavDestinations.TopicContent.topicNameArg)!!
                     ContentListScreen(
-                        viewModel = koinViewModel { parametersOf(id) },
+                        viewModel = koinViewModel { parametersOf(id, name) },
                         onContentClick = { navController.navigate(NavDestinations.ReviewList(it)) },
                         onBack = { navController.navigateUp() }
                     )

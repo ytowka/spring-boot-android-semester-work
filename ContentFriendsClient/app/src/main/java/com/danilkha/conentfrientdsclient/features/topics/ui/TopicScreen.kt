@@ -38,7 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TopicScreen(
     topicsViewModel: TopicViewModel = koinViewModel(),
-    onTopicClick: (Long) -> Unit,
+    onTopicClick: (TopicModel) -> Unit,
     onContentClick: (Long) -> Unit,
 ) {
     val state by topicsViewModel.state.collectAsState()
@@ -79,7 +79,7 @@ fun TopicScreen(
                 Header(stringResource(R.string.topics))
             }
             items(state.topics, key = { it.id }){
-                TopicListItem(topic = it, onClick = {onTopicClick(it.id)})
+                TopicListItem(topic = it, onClick = {onTopicClick(it)})
             }
         }
     }
