@@ -1,10 +1,9 @@
 package com.danilkha.conentfrientdsclient.features.review.ui.list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.danilkha.conentfrientdsclient.core.ui.PagingResponse
-import com.danilkha.conentfrientdsclient.features.content.domain.dto.ContentDto
-import com.danilkha.conentfrientdsclient.features.content.ui.toContentModel
 import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewDto
 import com.danilkha.conentfrientdsclient.features.review.domain.usecase.GetReviewsByContentUseCase
 import com.danilkha.conentfrientdsclient.features.review.ui.toReviewModel
@@ -32,6 +31,7 @@ class ReviewListViewModel(
         viewModelScope.launch {
             uiState.value.listState.loadNext {
                 val result = reviewsByContentUseCase(contentId, it).getOrThrow()
+                Log.d("debugg", "getNextPage() called ${result.reviews}")
                 PagingResponse(
                     data = result.reviews.map(ReviewDto::toReviewModel),
                     page = result.page,

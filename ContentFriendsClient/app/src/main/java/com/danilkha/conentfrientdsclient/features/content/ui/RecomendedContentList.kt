@@ -21,11 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.danilkha.conentfrientdsclient.features.review.ui.list.MarkBadge
 
 @Composable
 fun RecomendedContentList(
     items: List<ContentModel>,
-    onClick: (Long) -> Unit
+    onClick: (ContentModel) -> Unit
 ){
     LazyRow(
         modifier = Modifier
@@ -37,7 +38,7 @@ fun RecomendedContentList(
         items(items, key = { it.id }) { content ->
             RecomendationListItem(
                 contentModel = content,
-                onClick = { onClick(content.id) }
+                onClick = { onClick(content) }
             )
         }
     }
@@ -81,20 +82,9 @@ fun RecomendationListItem(
             color = Color.White,
         )
 
-        Text(
-            modifier = Modifier
-                .background(
-                    color = MarkColors.getMarkColor(contentModel.avgMark ?: 0f),
-                    shape = CircleShape
-                )
-                .padding(8.dp)
-                .align(Alignment.TopEnd),
-            text = ContentUtils.formatMark(contentModel.avgMark ?: 0f),
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                color = Color.White,
-                fontWeight = FontWeight.Black,
-            ),
+        MarkBadge(
+            modifier = Modifier.align(Alignment.TopEnd),
+            mark = contentModel.avgMark
         )
     }
 }

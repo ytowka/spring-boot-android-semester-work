@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.review.data
 
+import com.danilkha.conentfrientdsclient.core.network.NetworkModule
 import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewDto
 import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewListResponseDto
 import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewRequestDto
@@ -53,7 +54,8 @@ class ReviewRepositoryImpl(
 fun ReviewResponse.toDto(): ReviewDto = ReviewDto(
     userId = this.userId,
     contentId = contentId,
-    userAvatarUrl = userAvatarUrl,
+    contentName = contentName,
+    userAvatarUrl = NetworkModule.baseUrl+userAvatarUrl,
     userName = userName,
     mark = mark,
     writeTime = writeTime,

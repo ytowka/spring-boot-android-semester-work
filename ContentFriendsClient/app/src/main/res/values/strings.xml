@@ -17,6 +17,7 @@
     <string name="error_fields">Проверьте поля</string>
     <string name="admin_panel">Панель Админа</string>
     <string name="edit_user">Изменить пользователя</string>
+    <string name="user_profile">Профиль пользователя</string>
     <string name="is_blocked">Заблокировать</string>
     <string name="save">Сохранить</string>
     <string name="topics">Темы</string>
@@ -26,4 +27,5 @@
     <string name="review_more_in_category_for_recomendations">Оцените больше контента в этой категории, чтобы получать рекомендации</string>
     <string name="main">Главная</string>
     <string name="search">Поиск</string>
+    <string name="writesAbout">Пишет про </string>
 </resources>

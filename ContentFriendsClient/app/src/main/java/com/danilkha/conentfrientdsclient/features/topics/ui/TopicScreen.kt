@@ -39,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 fun TopicScreen(
     topicsViewModel: TopicViewModel = koinViewModel(),
     onTopicClick: (TopicModel) -> Unit,
-    onContentClick: (Long) -> Unit,
+    onContentClick: (ContentModel) -> Unit,
 ) {
     val state by topicsViewModel.state.collectAsState()
 

@@ -83,7 +83,7 @@ fun RootScreen(
                             navController.navigate(NavDestinations.TopicContent(it.id, it.name))
                         },
                         onContentClick = {
-                            navController.navigate(NavDestinations.ReviewList(it))
+                            navController.navigate(NavDestinations.ReviewList(it.id, it.name))
                         }
                     )
                 }
@@ -98,7 +98,7 @@ fun RootScreen(
                     val name = backStackEntry.arguments?.getString(NavDestinations.TopicContent.topicNameArg)!!
                     ContentListScreen(
                         viewModel = koinViewModel { parametersOf(id, name) },
-                        onContentClick = { navController.navigate(NavDestinations.ReviewList(it)) },
+                        onContentClick = { navController.navigate(NavDestinations.ReviewList(it.id, it.name)) },
                         onBack = { navController.navigateUp() }
                     )
                 }
@@ -136,17 +136,37 @@ fun RootScreen(
                         viewModel = koinViewModel { parametersOf(backStackEntry.arguments?.getString(NavDestinations.UserDetails.userIdArg)!!) },
                         onBack = {
                             navController.navigateUp()
-                        }
+                        },
+                        onContentClick = { navController.navigate(
+                            NavDestinations.ReviewList(
+                                it.reviewModel.contentId,
+                                it.reviewModel.contentName
+                            )
+                        ) }
                     )
                 }
 
                 composable(
                     route = NavDestinations.ReviewList.destination,
-                    arguments = listOf(navArgument(NavDestinations.ReviewList.contentIdArg) { type = NavType.LongType })
+                    arguments = listOf(
+                        navArgument(NavDestinations.ReviewList.contentIdArg) { type = NavType.LongType },
+                        navArgument(NavDestinations.ReviewList.contentNameArg) { type = NavType.StringType },
+                    )
                 ){ backStackEntry ->
                     val contentId = backStackEntry.arguments?.getLong(NavDestinations.ReviewList.contentIdArg)!!
+                    val contentName = backStackEntry.arguments?.getString(NavDestinations.ReviewList.contentNameArg)!!
                     ReviewListScreen(
                         viewModel = koinViewModel { parametersOf(contentId) },
+                        contentName = contentName,
+                        onBack = {
+                            navController.navigateUp()
+                        },
+                        onWriteReview = {
+                            navController.navigate(NavDestinations.ReviewEditor(contentId))
+                        },
+                        onCardClick = {
+                            navController.navigate(NavDestinations.UserProfile(it.reviewUserInfo.userId))
+                        }
                     )
                 }
 

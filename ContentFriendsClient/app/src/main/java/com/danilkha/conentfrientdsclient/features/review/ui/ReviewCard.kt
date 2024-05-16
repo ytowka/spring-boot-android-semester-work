@@ -12,6 +12,7 @@ fun ReviewDto.toReviewModel(): ReviewCard = ReviewCard(
         contentId = contentId,
         mark = mark,
         writeTime = writeTime,
+        contentName = contentName,
         text = text
     ),
     reviewUserInfo = ReviewUserInfo(

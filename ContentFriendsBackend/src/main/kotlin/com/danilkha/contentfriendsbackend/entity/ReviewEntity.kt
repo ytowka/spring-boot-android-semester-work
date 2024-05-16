@@ -38,7 +38,8 @@ fun ReviewEntity.toResponse(): ReviewResponse = ReviewResponse(
     text = text,
     mark = mark,
     userName = userPreview?.login ?: "",
-    writeTime = writeDateTime.time
+    writeTime = writeDateTime.time,
+    contentName = content?.name ?: ""
 )
 
 fun ReviewRequest.toEntity(

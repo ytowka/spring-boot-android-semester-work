@@ -36,7 +36,7 @@ import com.danilkha.conentfrientdsclient.features.topics.ui.TopicListItem
 @Composable
 fun ContentListScreen(
     viewModel: ContentListViewModel,
-    onContentClick: (Long) -> Unit,
+    onContentClick: (ContentModel) -> Unit,
     onBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -90,7 +90,7 @@ fun ContentListScreen(
             items(state.currentPagerState.list, key = { it.id }) {
                 ContentListItem(
                     contentModel = it,
-                    onClick = { onContentClick(it.id) }
+                    onClick = { onContentClick(it) }
                 )
             }
         }

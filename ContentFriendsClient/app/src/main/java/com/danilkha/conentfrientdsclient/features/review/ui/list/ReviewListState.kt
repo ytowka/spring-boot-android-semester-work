@@ -5,5 +5,5 @@ import com.danilkha.conentfrientdsclient.features.review.ui.ReviewCard
 
 data class ReviewListState(
     val contentId: Long = 0,
-    val listState: PagingState<ReviewCard> = PagingState.initial()
+    val listState: PagingState<ReviewCard> = PagingState.initial(),
 )
