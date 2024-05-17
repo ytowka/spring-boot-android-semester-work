@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.review.domain.usecase
 
+import com.danilkha.conentfrientdsclient.core.domain.UseCase
 import com.danilkha.conentfrientdsclient.features.review.domain.dto.ReviewListResponseDto
 import com.danilkha.conentfrientdsclient.features.review.domain.repository.ReviewRepository
 import kotlinx.coroutines.runBlocking
@@ -9,9 +10,14 @@ import java.util.*
 @Factory
 class GetReviewsByUserUseCase(
     private val reviewRepository: ReviewRepository
-) {
+) : UseCase<GetReviewsByUserUseCase.Params, ReviewListResponseDto>() {
 
-    suspend operator fun invoke(userId: UUID, page: Int): Result<ReviewListResponseDto> = kotlin.runCatching {
-        reviewRepository.getReviewsByUser(userId, page)
+    override suspend fun execute(params: Params): ReviewListResponseDto {
+       return reviewRepository.getReviewsByUser(params.userId, params.page)
     }
+
+    class Params(
+        val userId: UUID,
+        val page: Int
+    )
 }

@@ -33,9 +33,11 @@ class UserListViewModel(
                 .filter { it.isNotBlank() }
                 .distinctUntilChanged()
                 .collectLatest {
-                    val users = searchUserUseCase(it)
+                    val users = searchUserUseCase(it).getOrDefault(emptyList())
                     _uiState.update { it.copy(
-                        searchUsers = users.map { it.toUserModel() }
+                        searchUsers = users.map {
+                            it.toUserModel()
+                        }
                     ) }
                 }
         }

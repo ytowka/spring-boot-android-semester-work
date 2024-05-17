@@ -9,6 +9,7 @@ import java.util.UUID
 interface TopicService {
 
     fun getTopics(): List<ThemeResponse>
+    fun getContentById(contentId: Long): ContentResponse
 
     fun getContent(id: Long, page: Int): ContentListResponse
 

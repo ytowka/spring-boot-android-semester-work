@@ -1,29 +1,26 @@
 package com.danilkha.conentfrientdsclient.features.users.domain.usecase
 
 import android.util.Log
+import com.danilkha.conentfrientdsclient.core.domain.UseCase
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.UserDto
 import com.danilkha.conentfrientdsclient.features.users.domain.repository.UserListRepository
+import com.danilkha.conentfrientdsclient.features.users.domain.usecase.GetUserListUseCase.PageResult
 import org.koin.core.annotation.Factory
 
 @Factory
 class GetUserListUseCase(
     private val userListRepository: UserListRepository
-) {
+) : UseCase<Int, PageResult>(){
 
-    suspend operator fun invoke(page: Int): Result<PageResult>{
-        return kotlin.runCatching {
-            val data = userListRepository.getUserList(page)
-            PageResult(
-                users = data.first,
-                page = page,
-                hasNextPage = data.second
-            )
-        }.onSuccess {
-            Log.d("debugg", "GetUserListUseCase() onSuccess $it")
-        }.onFailure {
-            Log.d("debugg", "GetUserListUseCase() onFailure $it")
-        }
+    override suspend fun execute(page: Int): PageResult {
+        val data = userListRepository.getUserList(page)
+        return PageResult(
+            users = data.first,
+            page = page,
+            hasNextPage = data.second
+        )
     }
+
 
     class PageResult(
         val users: List<UserDto>,

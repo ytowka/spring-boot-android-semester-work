@@ -14,6 +14,9 @@ class RootViewModel(
 ) : ViewModel(){
 
     val isLoggedIn = isLoggedInUseCase()
+        .map {
+            it.getOrDefault(false)
+        }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val currentUser = flow {

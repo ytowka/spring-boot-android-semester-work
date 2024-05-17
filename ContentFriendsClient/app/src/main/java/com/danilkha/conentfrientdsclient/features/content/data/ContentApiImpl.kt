@@ -27,6 +27,10 @@ class ContentApiImpl(
         }.bodyOrThrow()
     }
 
+    override fun getById(contentId: Long): ContentResponse = runBlocking{
+        httpClient.get("/api/content/$contentId").bodyOrThrow()
+    }
+
     override fun getRecommendedContent(): List<ContentResponse> = runBlocking{
         httpClient.get("/api/content/rec").bodyOrThrow()
     }

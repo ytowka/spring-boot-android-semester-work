@@ -26,6 +26,11 @@ class ContentController(
         return topicService.searchContent(themeId, query)
     }
 
+    @GetMapping("/{contentId}")
+    override fun getById(@PathVariable("contentId") contentId: Long): ContentResponse {
+        return topicService.getContentById(contentId)
+    }
+
     @GetMapping("/rec")
     override fun getRecommendedContent(): List<ContentResponse> {
         return topicService.getRecommendedContent()

@@ -49,7 +49,8 @@ class UserInfoViewModel(
     fun getNextPage(){
         viewModelScope.launch {
             uiState.value.reviewListState.loadNext {
-                val result = reviewsByUserUseCase(userId = UUID.fromString(userId), it).getOrThrow()
+                val params = GetReviewsByUserUseCase.Params(UUID.fromString(userId), it)
+                val result = reviewsByUserUseCase(params).getOrThrow()
                 PagingResponse(
                     data = result.reviews.map(ReviewDto::toReviewModel),
                     page = result.page,

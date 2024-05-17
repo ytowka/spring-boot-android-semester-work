@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.util.UUID
+import kotlin.jvm.optionals.getOrElse
 import kotlin.math.abs
 
 @Service
@@ -29,6 +30,13 @@ class TopicServiceImpl(
         return topicRepository.findAll().map {
             it.toResponse()
         }
+    }
+
+    override fun getContentById(contentId: Long): ContentResponse {
+        return contentRepository.findByIdWithReviews(contentId)?.toResponse() ?: throw ServiceException(
+            HttpStatus.NOT_FOUND,
+            "Content with id $contentId not found"
+        )
     }
 
     override fun getContent(id: Long, page: Int): ContentListResponse {

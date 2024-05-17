@@ -37,4 +37,19 @@ where c.theme_id = :topicId and lower(c.name) like lower(:query)
     fun searchContentWithReviews(
         @Param("topicId") topicId: Long,
         @Param("query") query: String): List<ContentWithReviewView>
+
+
+    @Query("""
+select *, theme_id as themeId from content as c
+left join (
+    select r.content_id, avg(r.mark) avg, count(*) count
+    from review as r
+    group by r.content_id
+) as reviews on reviews.content_id = c.id
+where c.id = :contentId
+    """, nativeQuery = true)
+    fun findByIdWithReviews(
+        @Param("contentId") contentId: Long,
+    ): ContentWithReviewView?
 }
+

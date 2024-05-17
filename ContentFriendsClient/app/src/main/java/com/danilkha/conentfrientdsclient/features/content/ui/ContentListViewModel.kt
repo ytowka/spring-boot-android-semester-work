@@ -32,7 +32,8 @@ class ContentListViewModel(
                 .filter { it.isNotBlank() }
                 .distinctUntilChanged()
                 .collectLatest {
-                    val content = searchContentUseCase(topicId, it).getOrElse { emptyList() }
+                    val params = SearchContentUseCase.Params(topicId, it)
+                    val content = searchContentUseCase(params).getOrElse { emptyList() }
                     _uiState.update { it.copy(
                         searchList = content.map { it.toContentModel() }
                     ) }
@@ -49,7 +50,8 @@ class ContentListViewModel(
     fun getNextPage(){
         viewModelScope.launch {
             uiState.value.pagerState.loadNext {
-                val result = getAllContentUseCase(topicId, it).getOrThrow()
+                val params = GetAllContentUseCase.Params(topicId, it)
+                val result = getAllContentUseCase(params).getOrThrow()
                 PagingResponse(
                     data = result.content.map(ContentDto::toContentModel),
                     page = result.page,

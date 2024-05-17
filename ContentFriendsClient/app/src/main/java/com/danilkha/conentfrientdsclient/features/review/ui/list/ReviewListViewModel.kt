@@ -30,8 +30,8 @@ class ReviewListViewModel(
     fun getNextPage(){
         viewModelScope.launch {
             uiState.value.listState.loadNext {
-                val result = reviewsByContentUseCase(contentId, it).getOrThrow()
-                Log.d("debugg", "getNextPage() called ${result.reviews}")
+                val params = GetReviewsByContentUseCase.Params(contentId, it)
+                val result = reviewsByContentUseCase(params).getOrThrow()
                 PagingResponse(
                     data = result.reviews.map(ReviewDto::toReviewModel),
                     page = result.page,

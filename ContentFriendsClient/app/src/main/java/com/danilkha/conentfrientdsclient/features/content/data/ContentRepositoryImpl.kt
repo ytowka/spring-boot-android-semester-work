@@ -21,6 +21,10 @@ class ContentRepositoryImpl(
         contentApi.getAllContents(topicId, page).toDto()
     }
 
+    override suspend fun getById(contentId: Long): ContentDto = withContext(Dispatchers.IO){
+        contentApi.getById(contentId).toDto()
+    }
+
     override suspend fun searchContent(topicId: Long, query: String): List<ContentDto>  = withContext(Dispatchers.IO){
         contentApi.search(topicId, query).map(ContentResponse::toDto)
     }
