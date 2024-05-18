@@ -23,6 +23,8 @@ jwtParser = "0.12.5"
 coil = "2.6.0"
 spring = "2.7.18"
 spring-dependency-management = "1.1.4"
+springfoxSwagger2 = "2.9.2"
+springfoxSwagger2Annotatios = "1.6.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +72,10 @@ minio = { module = "io.minio:minio", version.ref = "minio" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
 spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging" }
+springfox-swagger2 = { module = "io.springfox:springfox-swagger2", version.ref = "springfoxSwagger2" }
+springfox-swagger2-ui = { module = "io.springfox:springfox-swagger-ui", version.ref = "springfoxSwagger2" }
+springfox-swagger2-annotations = { module = "io.swagger:swagger-annotations", version.ref = "springfoxSwagger2Annotatios" }
+springfox-swagger2-models = { module = "io.swagger:swagger-models", version.ref = "springfoxSwagger2Annotatios" }
 
 
 

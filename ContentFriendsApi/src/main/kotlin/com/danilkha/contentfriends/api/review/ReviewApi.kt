@@ -1,7 +1,7 @@
 package com.danilkha.contentfriends.api.review
 
-import com.danilkha.contentfriends.api.content.ContentListResponse
-import java.util.UUID
+
+import java.util.*
 
 interface ReviewApi {
 

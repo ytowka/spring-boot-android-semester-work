@@ -81,8 +81,18 @@ class WebSecurityConfig(
             "/api/auth/sign-in",
             "/api/auth/sign-up",
             "/api/auth/refresh-token",
-            "/files/**"
+            "/files/**",
+            "/v2/api-docs/**",
+            "/swagger-ui.html/**",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/null/swagger-resources/**",
         )
-        private val IGNORE = arrayOf<String>()
+        private val IGNORE = arrayOf<String>(
+            "/swagger-resources/**",
+            "/swagger-ui.html/**",
+            "/v2/api-docs/**",
+            "/webjars/**"
+        )
     }
 }

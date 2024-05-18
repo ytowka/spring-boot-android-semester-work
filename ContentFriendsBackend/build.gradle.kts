@@ -28,6 +28,13 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlin.reflect)
     api(project(":ContentFriendsApi"))
+    implementation(libs.springfox.swagger2){
+        exclude("io.swagger", "swagger-annotations")
+        exclude("io.swagger", "swagger-models")
+    }
+    implementation(libs.springfox.swagger2.models)
+    implementation(libs.springfox.swagger2.annotations)
+    implementation(libs.springfox.swagger2.ui)
     runtimeOnly(libs.postges)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.security.test)
