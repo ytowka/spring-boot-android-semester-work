@@ -4,6 +4,7 @@ import com.danilkha.contentfriends.api.content.ContentListResponse
 import com.danilkha.contentfriends.api.review.ReviewApi
 import com.danilkha.contentfriends.api.review.ReviewListResponse
 import com.danilkha.contentfriends.api.review.ReviewRequest
+import com.danilkha.contentfriends.api.review.ReviewResponse
 import com.danilkha.contentfriendsbackend.service.ReviewService
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -24,13 +25,19 @@ class ReviewController(
         return reviewService.getReviewsByUser(userId, page)
     }
 
+    @GetMapping("/user/{userId}/content/{contentId}")
+    override fun getReviewByUserContent(@PathVariable("userId") userId: UUID, @PathVariable("contentId") contentId: Long): ReviewResponse {
+        return reviewService.getReviewByUserContent(userId, contentId)
+    }
+
     @PostMapping
-    override fun writeReview(reviewRequest: ReviewRequest) {
+    override fun writeReview(@RequestBody reviewRequest: ReviewRequest) {
         return reviewService.writeReview(reviewRequest)
     }
 
     @PutMapping
-    override fun editReview(reviewRequest: ReviewRequest) {
+    override fun editReview(@RequestBody reviewRequest: ReviewRequest) {
+        println("editReview $reviewRequest")
         return reviewService.editReview(reviewRequest)
     }
 

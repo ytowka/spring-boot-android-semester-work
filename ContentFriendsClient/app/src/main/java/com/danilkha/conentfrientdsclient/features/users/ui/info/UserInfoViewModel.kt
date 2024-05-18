@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.users.ui.info
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.danilkha.conentfrientdsclient.core.ui.PagingResponse
@@ -22,6 +23,7 @@ class UserInfoViewModel(
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val getMatchScoreUseCase: GetMatchScoreUseCase,
     private val reviewsByUserUseCase: GetReviewsByUserUseCase,
+    private val getMeUseCase: GetMeUseCase,
     private val userId: String,
 ) : ViewModel(){
 
@@ -29,27 +31,42 @@ class UserInfoViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        getNextPage()
-        viewModelScope.launch {
-            getUserByIdUseCase(userId).onSuccess { result ->
-                _uiState.update {
-                    it.copy(userModel = result.toUserModel())
+        if(userId == MY_USER_ID){
+            viewModelScope.launch {
+                val user = getMeUseCase().getOrElse { return@launch }
+                _uiState.updateAndGet {
+                    it.copy(
+                        userModel = user.toUserModel(),
+                        isMe = true
+                    )
+                }
+                getNextPage()
+            }
+        }else{
+            viewModelScope.launch {
+                getUserByIdUseCase(userId).onSuccess { result ->
+                    _uiState.update {
+                        it.copy(userModel = result.toUserModel())
+                    }
+                }
+                getNextPage()
+            }
+            viewModelScope.launch {
+                getMatchScoreUseCase(UUID.fromString(userId)).onSuccess { result ->
+                    _uiState.update {
+                        it.copy(matchScore = result)
+                    }
                 }
             }
         }
-        viewModelScope.launch {
-            getMatchScoreUseCase(UUID.fromString(userId)).onSuccess { result ->
-                _uiState.update {
-                    it.copy(matchScore = result)
-                }
-            }
-        }
+
     }
 
     fun getNextPage(){
         viewModelScope.launch {
             uiState.value.reviewListState.loadNext {
-                val params = GetReviewsByUserUseCase.Params(UUID.fromString(userId), it)
+                val userId = uiState.first { it.userModel != null }.userModel?.id!!
+                val params = GetReviewsByUserUseCase.Params(userId, it)
                 val result = reviewsByUserUseCase(params).getOrThrow()
                 PagingResponse(
                     data = result.reviews.map(ReviewDto::toReviewModel),
@@ -60,5 +77,9 @@ class UserInfoViewModel(
                 _uiState.update { it.copy(reviewListState = pagingData) }
             }
         }
+    }
+
+    companion object{
+        const val MY_USER_ID = ""
     }
 }

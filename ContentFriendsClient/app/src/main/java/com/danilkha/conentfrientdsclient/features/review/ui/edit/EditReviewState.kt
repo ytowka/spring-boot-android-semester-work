@@ -1,12 +1,13 @@
 package com.danilkha.conentfrientdsclient.features.review.ui.edit
 
+import com.danilkha.conentfrientdsclient.features.content.ui.ContentModel
 import com.danilkha.conentfrientdsclient.features.review.ui.ReviewModel
 
 data class EditReviewState(
-    val mode: EditReviewMode = EditReviewMode.New,
+    val mode: EditReviewMode = EditReviewMode.Pending,
     val mark: Int? = null,
     val text: String = "",
-    val contentId: Long = 0
+    val content: ContentModel? = null
 ){
     val isValid: Boolean
         get() = when(mode){
@@ -17,10 +18,12 @@ data class EditReviewState(
             EditReviewMode.New -> {
                 mark != null
             }
+            EditReviewMode.Pending -> false
         }
 }
 
 sealed interface EditReviewMode {
+    data object Pending : EditReviewMode
     data object New : EditReviewMode
     class Edit(val reviewModel: ReviewModel) : EditReviewMode
 }

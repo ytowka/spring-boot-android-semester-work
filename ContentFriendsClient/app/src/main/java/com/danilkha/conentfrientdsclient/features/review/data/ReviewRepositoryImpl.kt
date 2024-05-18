@@ -32,6 +32,12 @@ class ReviewRepositoryImpl(
         }
     }
 
+    override suspend fun getReviewsByUserAndContent(userId: UUID, contentId: Long): ReviewDto {
+        return withContext(Dispatchers.IO){
+            reviewApi.getReviewByUserContent(userId, contentId).toDto()
+        }
+    }
+
     override suspend fun writeReview(reviewRequest: ReviewRequestDto) {
         return withContext(Dispatchers.IO) {
             reviewApi.writeReview(reviewRequest.toApiRequest())
@@ -52,6 +58,7 @@ class ReviewRepositoryImpl(
 }
 
 fun ReviewResponse.toDto(): ReviewDto = ReviewDto(
+    id = id,
     userId = this.userId,
     contentId = contentId,
     contentName = contentName,

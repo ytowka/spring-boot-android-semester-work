@@ -6,6 +6,7 @@ import java.util.UUID
 
 @Serializable
 data class ReviewResponse (
+    val id: Long,
     val userId: String,
     val contentId: Long,
     val contentName: String,

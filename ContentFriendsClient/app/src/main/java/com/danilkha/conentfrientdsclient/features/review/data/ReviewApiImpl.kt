@@ -4,6 +4,7 @@ import com.danilkha.conentfrientdsclient.core.network.bodyOrThrow
 import com.danilkha.contentfriends.api.review.ReviewApi
 import com.danilkha.contentfriends.api.review.ReviewListResponse
 import com.danilkha.contentfriends.api.review.ReviewRequest
+import com.danilkha.contentfriends.api.review.ReviewResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,10 @@ class ReviewApiImpl(
         httpClient.get("/api/reviews/user/$userId"){
             parameter("page", page)
         }.bodyOrThrow()
+    }
+
+    override fun getReviewByUserContent(userId: UUID, contentId: Long): ReviewResponse = runBlocking {
+        httpClient.get("/api/reviews/user/$userId/content/$contentId").bodyOrThrow()
     }
 
     override fun writeReview(reviewRequest: ReviewRequest): Unit = runBlocking {

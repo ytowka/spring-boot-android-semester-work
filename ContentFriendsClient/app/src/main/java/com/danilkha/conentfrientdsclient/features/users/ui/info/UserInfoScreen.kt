@@ -42,7 +42,8 @@ import org.koin.androidx.compose.koinViewModel
 fun UserInfoScreen(
     viewModel: UserInfoViewModel = koinViewModel(),
     onBack: () -> Unit,
-    onContentClick: (ReviewCard) -> Unit
+    onContentClick: (ReviewCard) -> Unit,
+    onReviewClick: (ReviewCard) -> Unit,
 ){
     val state by viewModel.uiState.collectAsState()
 
@@ -104,7 +105,8 @@ fun UserInfoScreen(
             modifier = Modifier.weight(1f),
             pagingState = state.reviewListState,
             nextPageRequest = viewModel::getNextPage,
-            onContentClick = onContentClick
+            onContentClick = onContentClick,
+            onReviewClick = onReviewClick.takeIf { state.isMe },
         )
     }
 }
@@ -115,6 +117,7 @@ fun UserProfileReviewList(
     pagingState: PagingState<ReviewCard>,
     nextPageRequest: () -> Unit,
     onContentClick: (ReviewCard) -> Unit,
+    onReviewClick: ((ReviewCard) -> Unit)?,
 ){
 
     val listState = rememberPageableListState(pagingState, nextPageRequest)
@@ -129,7 +132,11 @@ fun UserProfileReviewList(
         items(pagingState.list, key = { "${it.reviewModel.contentId}${it.reviewUserInfo.userId}" }){
             UserProfileReviewCard(
                 it,
-                onContentClick = { onContentClick(it) }
+                onContentClick = { onContentClick(it) },
+                onCardClick = if(onReviewClick != null){
+                    {
+                        onReviewClick(it)
+                    }}else null
             )
         }
         item {
@@ -142,10 +149,12 @@ fun UserProfileReviewList(
 fun UserProfileReviewCard(
     reviewCard: ReviewCard,
     onContentClick: () -> Unit,
+    onCardClick: (() -> Unit)?,
 ){
     Card{
         Column(
             modifier = Modifier
+                .then(if (onCardClick != null) Modifier.clickable(onClick = onCardClick) else Modifier)
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
@@ -189,6 +198,10 @@ fun UserProfileReviewCard(
                         }
                     )
                 }
+                Spacer(modifier = Modifier.weight(1f))
+                MarkBadge(
+                    mark = reviewCard.reviewModel.mark
+                )
             }
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -196,10 +209,6 @@ fun UserProfileReviewCard(
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(10.dp))
-            MarkBadge(
-                modifier = Modifier.align(Alignment.End),
-                mark = reviewCard.reviewModel.mark.toFloat()
-            )
         }
     }
 }

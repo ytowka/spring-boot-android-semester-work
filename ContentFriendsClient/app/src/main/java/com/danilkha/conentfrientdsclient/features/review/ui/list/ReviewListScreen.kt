@@ -1,6 +1,5 @@
 package com.danilkha.conentfrientdsclient.features.review.ui.list
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -136,6 +135,10 @@ fun ReviewCard(
                     text = "@${reviewCard.reviewUserInfo.userName}",
                     style = MaterialTheme.typography.titleMedium,
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                MarkBadge(
+                        mark = reviewCard.reviewModel.mark
+                )
             }
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -143,10 +146,6 @@ fun ReviewCard(
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(10.dp))
-            MarkBadge(
-                modifier = Modifier.align(Alignment.End),
-                mark = reviewCard.reviewModel.mark.toFloat()
-            )
         }
     }
 }
@@ -154,8 +153,9 @@ fun ReviewCard(
 @Composable
 fun MarkBadge(
     modifier: Modifier = Modifier,
-    mark: Float?
+    mark: Number?
 ){
+
     Text(
         modifier = modifier
             .size(50.dp)

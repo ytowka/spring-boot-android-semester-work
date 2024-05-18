@@ -17,6 +17,8 @@ interface ReviewRepository : JpaRepository<ReviewEntity, Long> {
 
     fun getReviewsByUserId(userId: UUID): List<ReviewEntity>
 
+    fun getByUserIdAndContentId(userId: UUID, contentId: Long): ReviewEntity?
+
 
     @Query("""
         SELECT distinct(c.theme_id) from review as r

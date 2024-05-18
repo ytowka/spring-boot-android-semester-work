@@ -18,15 +18,21 @@ class AuthenticationInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking{
         val accessToken = authTokenProvider.getToken()
 
-
-        val newRequest = accessToken?.let {
+        var newRequest = accessToken?.let {
             newRequestWithAccessToken(chain.request(), accessToken)
         }
-        chain.proceed(newRequest ?: chain.request()).also {
-            if(it.code == 401){
+        var response = chain.proceed(newRequest ?: chain.request())
+        if(response.code == 401){
+            val newToken = authTokenProvider.refreshAndGetToken()
+            newRequest = newToken?.let {
+                newRequestWithAccessToken(chain.request(), it)
+            }
+            response = chain.proceed(newRequest ?: chain.request())
+            if(response.code == 401){
                 logoutUseCase()
             }
         }
+        response
     }
 
     private fun newRequestWithAccessToken(request: Request, accessToken: String): Request {

@@ -32,6 +32,7 @@ data class ReviewEntity(
 }
 
 fun ReviewEntity.toResponse(): ReviewResponse = ReviewResponse(
+    id = id,
     userId = userId.toString(),
     contentId = contentId,
     userAvatarUrl = "$FILES_PATH/${userPreview?.avatarFileName}",
@@ -43,10 +44,11 @@ fun ReviewEntity.toResponse(): ReviewResponse = ReviewResponse(
 )
 
 fun ReviewRequest.toEntity(
+    id: Long = 0,
     userId: UUID,
     writeTime: Timestamp
 ): ReviewEntity = ReviewEntity(
-    id = 0,
+    id = id,
     userId = userId,
     contentId = this.contentId,
     text = this.text,

@@ -6,6 +6,7 @@ object NavDestinations {
     const val TOPIC_LIST = "topic_list"
     const val USER_ADMIN_LIST = "user_admin_list"
     const val USER_SEARCH = "user_search"
+    const val MY_ACCOUNT = "my_account"
 
     object TopicContent{
         const val topicIdArg = "topicId"

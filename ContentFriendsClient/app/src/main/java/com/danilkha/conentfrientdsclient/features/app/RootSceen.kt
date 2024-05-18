@@ -1,16 +1,17 @@
 package com.danilkha.conentfrientdsclient.features.app
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,8 +27,8 @@ import com.danilkha.conentfrientdsclient.features.review.ui.edit.ReviewEditorScr
 import com.danilkha.conentfrientdsclient.features.review.ui.list.ReviewListScreen
 import com.danilkha.conentfrientdsclient.features.topics.ui.TopicScreen
 import com.danilkha.conentfrientdsclient.features.users.domain.dto.RoleDto
-import com.danilkha.conentfrientdsclient.features.users.ui.UserRoleModel
 import com.danilkha.conentfrientdsclient.features.users.ui.info.UserInfoScreen
+import com.danilkha.conentfrientdsclient.features.users.ui.info.UserInfoViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -142,7 +143,28 @@ fun RootScreen(
                                 it.reviewModel.contentId,
                                 it.reviewModel.contentName
                             )
-                        ) }
+                        ) },
+                        onReviewClick = {}
+                    )
+                }
+
+                composable(
+                    route = NavDestinations.MY_ACCOUNT,
+                ){
+                    UserInfoScreen(
+                        viewModel = koinViewModel { parametersOf(UserInfoViewModel.MY_USER_ID) },
+                        onBack = {
+                            navController.navigateUp()
+                        },
+                        onContentClick = { navController.navigate(
+                            NavDestinations.ReviewList(
+                                it.reviewModel.contentId,
+                                it.reviewModel.contentName
+                            )
+                        ) },
+                        onReviewClick = {
+                            navController.navigate(NavDestinations.ReviewEditor(it.reviewModel.contentId))
+                        }
                     )
                 }
 
@@ -177,32 +199,51 @@ fun RootScreen(
                     val contentId = backStackEntry.arguments?.getLong(NavDestinations.ReviewEditor.contentIdArg)!!
                     ReviewEditorScreen(
                         viewModel = koinViewModel { parametersOf(contentId) },
+                        onBack = { navController.navigateUp() },
+                        onSave = {  navController.navigate(NavDestinations.MY_ACCOUNT) }
                     )
                 }
 
             }
             var currentNavItem by remember { mutableIntStateOf(0) }
+
+            LaunchedEffect(navController.currentDestination){
+                navController.currentDestination?.apply {
+                    Log.d("debugg", "RootScreen() called ${label} ${route} ${id}")
+                }
+
+                when(navController.currentDestination?.route){
+                    NavDestinations.MY_ACCOUNT -> currentNavItem = 2
+                    NavDestinations.USER_SEARCH -> currentNavItem = 1
+                    NavDestinations.TOPIC_LIST -> currentNavItem = 0
+                    NavDestinations.USER_ADMIN_LIST -> currentNavItem = 3
+                }
+            }
             if(isLoggedIn == true){
                 NavigationBar(
                     items = {
+                        navigationItem(label = "Главная", icon = Icons.Default.Menu, onClick = {
+                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.TOPIC_LIST, false).build()
+                            currentNavItem = it
+                            navController.navigate(NavDestinations.TOPIC_LIST, navOptions = navOptions)
+                        })
+                        navigationItem(label = "Пользователи", icon = Icons.Default.Groups, onClick = {
+                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.USER_SEARCH, false).build()
+                            currentNavItem = it
+                            navController.navigate(NavDestinations.USER_SEARCH, navOptions = navOptions)
+                        })
+                        navigationItem(label = "Я", icon = Icons.Default.AccountCircle, onClick = {
+                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.MY_ACCOUNT, false).build()
+                            currentNavItem = it
+                            navController.navigate(NavDestinations.MY_ACCOUNT, navOptions = navOptions)
+                        })
                         if(currentUser?.role == RoleDto.ADMIN){
-                            navigationItem(label = "admin", icon = Icons.Default.AccountCircle, onClick = {
+                            navigationItem(label = "Админ", icon = Icons.Default.AccountCircle, onClick = {
                                 val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.USER_ADMIN_LIST, false).build()
                                 currentNavItem = it
                                 navController.navigate(NavDestinations.USER_ADMIN_LIST, navOptions = navOptions)
                             })
                         }
-                        navigationItem(label = "topics", icon = Icons.Default.Menu, onClick = {
-                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.TOPIC_LIST, false).build()
-                            currentNavItem = it
-                            navController.navigate(NavDestinations.TOPIC_LIST, navOptions = navOptions)
-                        })
-                        navigationItem(label = "users", icon = Icons.Default.AccountCircle, onClick = {
-                            val navOptions = NavOptions.Builder().setPopUpTo(NavDestinations.USER_SEARCH, false).build()
-                            currentNavItem = it
-                            navController.navigate(NavDestinations.USER_SEARCH, navOptions = navOptions)
-                        })
-
                     },
                     selectedItemIndex = currentNavItem
                 )

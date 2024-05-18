@@ -1,6 +1,7 @@
 package com.danilkha.conentfrientdsclient.features.auth.domain.usecase
 
 import android.util.Log
+import com.danilkha.conentfrientdsclient.features.auth.domain.dto.TokenPairDto
 import com.danilkha.conentfrientdsclient.features.auth.domain.repository.AccessTokenDto
 import com.danilkha.conentfrientdsclient.features.auth.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,20 +36,32 @@ class AuthTokenProvider(
                 return accessToken
             }
 
-            val refreshToken = authRepository.getRefreshToken().also {
-                Log.d("debugg", "getRefreshToken() called = $it")
-            } ?: return null
-
-
-            val newToken = try{
-                authRepository.getNewToken(refreshToken)
-            }catch(e: Exception){
-                null
-            }
-            return newToken?.accessToken
+            val refreshToken = getRefreshToken()
+            return refreshToken?.accessToken
         }
     }
 
+
+    suspend fun refreshAndGetToken() : String? {
+        mutex.withLock {
+            val refreshToken = getRefreshToken()
+            return refreshToken?.accessToken
+        }
+    }
+
+
+    private suspend fun getRefreshToken(): TokenPairDto? {
+        val refreshToken = authRepository.getRefreshToken().also {
+            Log.d("debugg", "getRefreshToken() called = $it")
+        } ?: return null
+
+
+        return try{
+            authRepository.getNewToken(refreshToken)
+        }catch(e: Exception){
+            null
+        }
+    }
 
 
     private fun AccessTokenDto.isFresh() = expiresIn > System.currentTimeMillis() + EXPIRATION_THRESHOLD_MILLIS
