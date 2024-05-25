@@ -34,4 +34,8 @@ class AuthController(
         return userService.updateAvatar(file)
     }
 
+    @PostMapping("/sign-up/avatar/empty")
+    fun uploadAvatar(): LoadFileResult{
+        return userService.updateAvatar(null)
+    }
 }

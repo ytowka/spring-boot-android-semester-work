@@ -12,6 +12,6 @@ interface UserService{
     fun search(query: String): List<UserResponse>
     fun getById(id: String): UserResponse
     fun update(user: UserRequest): UserResponse
-    fun updateAvatar(file: MultipartFile): LoadFileResult
+    fun updateAvatar(file: MultipartFile?): LoadFileResult
     fun getMe(): UserResponse
 }

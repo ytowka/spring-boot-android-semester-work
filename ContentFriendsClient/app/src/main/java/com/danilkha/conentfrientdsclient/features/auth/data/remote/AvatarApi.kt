@@ -1,5 +1,6 @@
 package com.danilkha.conentfrientdsclient.features.auth.data.remote
 
+import com.danilkha.conentfrientdsclient.core.network.bodyOrThrow
 import com.danilkha.contentfriends.api.auth.LoadFileResult
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -28,6 +29,12 @@ class AvatarApi(
             onUpload { bytesSentTotal, contentLength ->
                 println("Sent $bytesSentTotal bytes from $contentLength")
             }
+        }.body<LoadFileResult>().imageId
+    }
+
+    suspend fun submitNoAvatar(accessToken: String): String {
+        return httpClient.post("api/auth/sign-up/avatar/empty"){
+            header("Authorization", "Bearer $accessToken")
         }.body<LoadFileResult>().imageId
     }
 }

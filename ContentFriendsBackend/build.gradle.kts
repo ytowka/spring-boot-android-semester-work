@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.spring.boot.starter.logging)
     implementation (libs.hibernate.core)
     implementation(libs.minio)
+    implementation(libs.apache.commons.io)
     implementation(libs.jwt.parser)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlin.reflect)

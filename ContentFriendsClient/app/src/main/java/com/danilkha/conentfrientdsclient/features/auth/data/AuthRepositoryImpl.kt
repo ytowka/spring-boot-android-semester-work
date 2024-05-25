@@ -55,7 +55,11 @@ class AuthRepositoryImpl(
                     contentResolver.openInputStream(registerRequestDto.avatarUri)?.use { it.readBytes() }?.let {
                         avatarApi.loadAvatar(it, name, response.accessToken)
                     }
+                }else{
+                    avatarApi.submitNoAvatar(response.accessToken)
                 }
+            }else{
+                avatarApi.submitNoAvatar(response.accessToken)
             }
             saveToken(response)
         }

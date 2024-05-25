@@ -25,6 +25,7 @@ spring = "2.7.18"
 spring-dependency-management = "1.1.4"
 springfoxSwagger2 = "2.9.2"
 springfoxSwagger2Annotatios = "1.6.12"
+apacheCommonsIo = "2.16.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -69,6 +70,7 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 postges = { module = "org.postgresql:postgresql" }
 hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "hibernateCore" }
 minio = { module = "io.minio:minio", version.ref = "minio" }
+apache-commons-io = { module = "commons-io:commons-io", version.ref = "apacheCommonsIo" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
 spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging" }

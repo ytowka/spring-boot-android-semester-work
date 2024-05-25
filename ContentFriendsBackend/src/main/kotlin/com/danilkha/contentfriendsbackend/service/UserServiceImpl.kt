@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.BufferedInputStream
+import java.io.InputStream
+import java.net.URL
 import java.util.*
 import kotlin.jvm.optionals.getOrElse
 
@@ -60,10 +63,17 @@ class UserServiceImpl(
         return accountRepository.save(updated).toDto().toResponse()
     }
 
-    override fun updateAvatar(file: MultipartFile): LoadFileResult {
-        val fileName = storageService.saveFile(file)
+    override fun updateAvatar(file: MultipartFile?): LoadFileResult {
         val user = SecurityContextHolder.getContext().authentication.principal as AccountUserDetails
+
+        val fileName: String = if(file != null){
+           storageService.saveFile(file)
+        }else{
+           getDefaultAvatarUrl(user.username)
+        }
+
         accountRepository.setAvatar(fileName, user.id)
+
         return LoadFileResult(fileName)
     }
 
@@ -72,6 +82,22 @@ class UserServiceImpl(
         return accountRepository.findById(userId.id).getOrElse {
             throw UserNotFoundException("user with id ${userId.id} not found")
         }.toDto().toResponse()
+    }
+
+    private fun getDefaultAvatarUrl(name: String): String {
+        val nameRequest = name.replace(" ","+")
+        val url = URL("https://ui-avatars.com/api/?name=$nameRequest&background=random&format=png&bold=true")
+        val fileName = buildString {
+            append(UUID.randomUUID().toString())
+            append(name)
+            append(".png")
+        }
+        storageService.saveImageFrom(
+            url = url,
+            filename = fileName
+        )
+        return fileName
+
     }
 
     companion object{
