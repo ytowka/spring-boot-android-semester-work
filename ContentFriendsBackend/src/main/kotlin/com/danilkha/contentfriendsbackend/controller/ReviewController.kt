@@ -88,5 +88,4 @@ class ReviewController(
     override fun deleteReview(@PathVariable reviewId: Long) {
         return reviewService.deleteReview(reviewId)
     }
-
 }

@@ -20,6 +20,8 @@ dependencies {
     implementation(libs.spring.boot.starter.data)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.test)
+    implementation(libs.spring.boot.security.test)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.logging)
     implementation (libs.hibernate.core)
