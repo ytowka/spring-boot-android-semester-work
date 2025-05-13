@@ -10,6 +10,7 @@ services:
       - postgres
       - minio
     environment:
+      - SERVER_PORT= 8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/contentfriendsdb
       - SPRING_DATASOURCE_USERNAME=contentfriends
       - SPRING_DATASOURCE_PASSWORD=admin
@@ -17,6 +18,8 @@ services:
       - minio_username=danilkha
       - minio_url=http://minio:9000
       - minio_password=donil0304
+    ports:
+      - "8080:8080"
   postgres:
     image: postgres:16.3
     environment:
