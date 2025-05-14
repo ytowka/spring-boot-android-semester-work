@@ -2,15 +2,15 @@ package com.danilkha.conentfrientdsclient.features.auth.ui
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.danilkha.conentfrientdsclient.core.network.ApiException
 import com.danilkha.conentfrientdsclient.features.auth.domain.dto.LoginRequestDto
 import com.danilkha.conentfrientdsclient.features.auth.domain.dto.RegisterRequestDto
 import com.danilkha.conentfrientdsclient.features.auth.domain.usecase.LoginUseCase
 import com.danilkha.conentfrientdsclient.features.auth.domain.usecase.RegisterUseCase
-import com.danilkha.contentfriends.api.auth.RegisterRequest
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -161,6 +161,12 @@ class AuthViewModel(
     private fun mapError(throwable: Throwable): Error{
         return when(throwable){
             is ConnectException -> Error.NETWORK
+            is ApiException -> {
+                when(throwable.exceptionBody.status) {
+                    HttpStatusCode.BadRequest.value -> Error.WRONG_CREDENTIALS
+                    else -> Error.OTHER
+                }
+            }
             else -> Error.OTHER
         }
     }
