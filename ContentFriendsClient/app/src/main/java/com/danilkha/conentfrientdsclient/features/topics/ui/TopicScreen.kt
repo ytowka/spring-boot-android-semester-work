@@ -80,7 +80,7 @@ fun Header(
     Column {
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Black),
         )
     }
