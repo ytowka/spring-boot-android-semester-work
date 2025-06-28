@@ -10,7 +10,9 @@ import java.util.UUID
 import javax.persistence.*
 
 @Entity
-@Table(name = "review")
+@Table(name = "review", uniqueConstraints = [
+    UniqueConstraint(columnNames = ["user_id", "content_id"])
+])
 data class ReviewEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
